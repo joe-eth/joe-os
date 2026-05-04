@@ -2426,17 +2426,8 @@
     <div class="card shadow-card span-12">
       <div class="label">
         <span class="label-text">S3 · The Shadow</span>
-        <span class="label-tag">Tracker</span>
+        <span class="label-tag"><span id="shadow-counter-num" style="font-weight:800">—</span> <span id="shadow-counter-unit">days clean</span></span>
       </div>
-
-      <div class="shadow-main">
-        <div class="shadow-counter">
-          <div class="shadow-counter-num" id="shadow-counter-num">—</div>
-          <div class="shadow-counter-unit" id="shadow-counter-unit">days since last</div>
-          <div class="shadow-counter-sub" id="shadow-counter-sub">Not tracked yet</div>
-        </div>
-      </div>
-
       <div class="shadow-timeline" id="shadow-timeline"></div>
     </div>
 
@@ -4920,24 +4911,18 @@ function renderShadow(){
   ensureShadowState();
   if(!document.getElementById('shadow-counter-num')) return;
 
-  // Counter
+  // Counter (inline in label)
   const daysSince = daysSinceLastSlip();
   const numEl = document.getElementById('shadow-counter-num');
   const unitEl = document.getElementById('shadow-counter-unit');
-  const subEl = document.getElementById('shadow-counter-sub');
-  const occ = state.shadow.occurrences || [];
-
-  if(occ.length === 0){
-    numEl.textContent = '—';
-    numEl.classList.remove('zero');
-    unitEl.textContent = 'No slips logged';
-    subEl.textContent = 'Tracking starts today';
-  } else {
-    numEl.textContent = daysSince;
-    numEl.classList.toggle('zero', daysSince === 0);
-    unitEl.textContent = daysSince === 1 ? 'day since last' : 'days since last';
-    const totalLogged = occ.length;
-    subEl.textContent = `${totalLogged} ${totalLogged === 1 ? 'slip' : 'slips'} logged · all time`;
+  if(numEl && unitEl){
+    if(daysSince === null){
+      numEl.textContent = '—';
+      unitEl.textContent = 'not tracked yet';
+    } else {
+      numEl.textContent = daysSince;
+      unitEl.textContent = daysSince === 1 ? 'day clean' : 'days clean';
+    }
   }
 
   const todayKey = new Date().toISOString().slice(0,10);
