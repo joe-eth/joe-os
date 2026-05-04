@@ -3065,6 +3065,11 @@ async function loadFromLocal(){
     if(cockpit) state.cockpit = cockpit;
     if(focus) state.focus = focus;
     if(shadow) state.shadow = shadow;
+    // Migrate old manifesto format
+    if(state.manifesto && state.manifesto.includes('class="sep"') && !state.manifesto.includes('manifesto-phrase')){
+      const plainText = manifestoHtmlToText(state.manifesto);
+      state.manifesto = manifestoTextToHtml(plainText);
+    }
     if(state.manifesto){
       const el = document.getElementById('manifesto-phrases');
       if(el) el.innerHTML = state.manifesto;
@@ -3130,6 +3135,13 @@ async function cloudSyncPull(){
       try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){}
     }
   });
+
+  // Migrate old manifesto format (sep spans) to new phrase pills
+  if(state.manifesto && state.manifesto.includes('class="sep"') && !state.manifesto.includes('manifesto-phrase')){
+    const plainText = manifestoHtmlToText(state.manifesto);
+    state.manifesto = manifestoTextToHtml(plainText);
+    save('core');
+  }
 
   // Re-render with merged state
   if(state.manifesto){
@@ -4928,11 +4940,7 @@ function renderShadow(){
     subEl.textContent = `${totalLogged} ${totalLogged === 1 ? 'slip' : 'slips'} logged · all time`;
   }
 
-  // Button active state (based on today's status)
   const todayKey = new Date().toISOString().slice(0,10);
-  const todayStatus = getDayStatus(todayKey);
-  document.getElementById('shadow-btn-clean').classList.toggle('active', todayStatus === 'clean');
-  document.getElementById('shadow-btn-slip').classList.toggle('active', todayStatus === 'slip');
 
   // Timeline: last 30 days
   const timeline = document.getElementById('shadow-timeline');
