@@ -12,7 +12,7 @@
   :root{
     color-scheme: light;
     --bg:#e8ecf4;
-    --surface:rgba(255,255,255,0.55);
+    --surface:#ffffff;
     --surface-2:#f5f7fb;
     --surface-solid:#ffffff;
     --surface-solid-2:#f5f7fb;
@@ -47,12 +47,7 @@
     position:relative;
   }
 
-  /* Subtle noise grain on background — keeps texture without color noise */
-  body::after{
-    content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-    mix-blend-mode:multiply;opacity:0.4;
-  }
+  /* Noise grain removed — flat background */
 
   .app{position:relative;z-index:2;padding:20px 24px 48px;max-width:1640px;margin:0 auto}
 
@@ -69,7 +64,6 @@
     background:var(--blue);color:#fff;
     display:flex;align-items:center;justify-content:center;
     font-weight:800;font-size:22px;letter-spacing:-0.04em;
-    box-shadow:0 8px 24px -6px var(--blue-glow);
   }
   .brand-text{display:flex;flex-direction:column;gap:0}
   .brand-name{font-weight:800;font-size:20px;letter-spacing:-0.03em;line-height:1.1;color:var(--ink)}
@@ -78,59 +72,32 @@
 
   .topbar-right{display:flex;align-items:center;gap:8px}
   .pill-btn{
-    height:40px;padding:0 18px;border-radius:999px;border:1px solid var(--glass-border);
-    background:rgba(255,255,255,0.55);
-    backdrop-filter:blur(12px) saturate(160%);
-    -webkit-backdrop-filter:blur(12px) saturate(160%);
+    height:40px;padding:0 18px;border-radius:999px;border:1px solid var(--line-strong);
+    background:#fff;
     color:var(--ink);cursor:pointer;
     font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:-0.01em;
     display:inline-flex;align-items:center;gap:8px;transition:all 0.2s ease;
-    box-shadow:0 1px 0 rgba(255,255,255,0.6) inset, 0 2px 6px -2px rgba(10,23,51,0.08);
   }
-  .pill-btn:hover{background:rgba(255,255,255,0.75);border-color:var(--ink-dim)}
-  .pill-btn.dark{background:var(--navy);color:#fff;border-color:var(--navy);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .pill-btn:hover{background:var(--surface-2);border-color:var(--ink-dim)}
+  .pill-btn.dark{background:var(--navy);color:#fff;border-color:var(--navy)}
   .pill-btn.dark:hover{background:var(--ink-2)}
-  .pill-btn.blue{background:var(--blue);color:#fff;border-color:var(--blue);backdrop-filter:none;-webkit-backdrop-filter:none}
-  .pill-btn.blue:hover{background:var(--blue-dark);box-shadow:0 8px 24px -6px var(--blue-glow)}
-  .pill-btn .status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(24,178,107,0.2)}
+  .pill-btn.blue{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .pill-btn.blue:hover{background:var(--blue-dark)}
+  .pill-btn .status-dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
 
   /* ==================== MANIFESTO HERO ==================== */
   .manifesto{
-    background:var(--surface);
-    border-radius:28px;
-    padding:40px 44px;margin-bottom:20px;position:relative;overflow:hidden;
+    background:#fff;
+    border-radius:12px;
+    padding:20px 24px;margin-bottom:16px;position:relative;overflow:hidden;
     border:1px solid var(--line);
-    box-shadow:
-      0 1px 0 rgba(255,255,255,0.7) inset,
-      0 30px 70px -30px rgba(10,23,51,0.14),
-      0 4px 12px -4px rgba(10,23,51,0.06);
     opacity:0;transform:translateY(12px);
     animation:rise 0.7s cubic-bezier(.2,.8,.2,1) 0.05s forwards;
   }
-  /* Inner top highlight for glass refraction */
-  .manifesto::after{
-    content:'';position:absolute;top:0;left:8%;right:8%;height:1px;
-    background:linear-gradient(90deg,transparent,rgba(255,255,255,0.95),transparent);
-    pointer-events:none;z-index:3;
-  }
   @keyframes rise{to{opacity:1;transform:translateY(0)}}
 
-  /* Blue gradient decoration — localized in top-right corner */
-  .manifesto-deco{
-    position:absolute;right:-60px;top:-80px;width:520px;height:420px;pointer-events:none;overflow:hidden;
-  }
-  .manifesto-deco::before{
-    content:'';position:absolute;inset:0;
-    background:
-      radial-gradient(ellipse 55% 55% at 65% 40%, rgba(21,84,255,0.42), transparent 65%),
-      radial-gradient(ellipse 45% 45% at 85% 70%, rgba(15,63,204,0.25), transparent 65%);
-    filter:blur(30px);
-  }
-  .manifesto-deco::after{
-    content:'';position:absolute;inset:0;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='280' height='280'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-    mix-blend-mode:overlay;opacity:0.8;
-  }
+  /* Blue gradient decoration — removed */
+  .manifesto-deco{display:none}
 
   .manifesto-content{position:relative;z-index:2;max-width:980px}
   .manifesto-kicker{
@@ -141,13 +108,15 @@
   }
   .manifesto-kicker .dot{width:5px;height:5px;border-radius:50%;background:var(--blue)}
 
-  .manifesto-quote{
-    font-size:52px;line-height:1.08;letter-spacing:-0.035em;font-weight:800;
-    color:var(--ink);outline:none;margin-bottom:6px;
+  .manifesto-phrases{
+    display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;
   }
-  .manifesto-quote:focus{outline:none}
-  .manifesto-quote em{font-style:normal;color:var(--blue);font-weight:800}
-  .manifesto-quote .sep{color:var(--ink-faint);font-weight:400;margin:0 6px}
+  .manifesto-phrase{
+    display:inline-block;padding:8px 16px;
+    background:var(--surface-2);border:1px solid var(--line);border-radius:8px;
+    font-size:14px;font-weight:700;letter-spacing:-0.01em;color:var(--ink);
+  }
+  .manifesto-phrase em{font-style:normal;color:var(--blue);font-weight:700}
 
   .manifesto-meta-row{
     display:flex;justify-content:space-between;align-items:center;gap:20px;
@@ -166,7 +135,7 @@
     font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:-0.01em;
     cursor:pointer;transition:all 0.2s ease;
   }
-  .manifesto-edit-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 8px 20px -6px var(--blue-glow)}
+  .manifesto-edit-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
   .manifesto-edit-btn svg{opacity:0.7;transition:opacity 0.2s ease}
   .manifesto-edit-btn:hover svg{opacity:1}
 
@@ -192,17 +161,12 @@
     transition:all 0.15s ease;
   }
   .modal-manifesto-editor textarea:focus{
-    border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px var(--blue-soft);
+    border-color:var(--blue);background:#fff;
   }
   .modal-manifesto-preview{
-    background:linear-gradient(135deg,var(--surface-2) 0%,#eef2fa 100%);
+    background:var(--surface-2);
     border:1px solid var(--line);border-radius:12px;
     padding:16px 18px;margin-bottom:18px;position:relative;overflow:hidden;
-  }
-  .modal-manifesto-preview::before{
-    content:'';position:absolute;top:-40%;right:-10%;width:50%;height:120%;
-    background:radial-gradient(ellipse,rgba(21,84,255,0.12),transparent 70%);
-    pointer-events:none;
   }
   .modal-manifesto-preview-label{
     position:relative;font-family:'JetBrains Mono',monospace;font-size:9.5px;
@@ -232,31 +196,12 @@
   .span-8  { grid-column:span 8; }
   .span-12 { grid-column:span 12; }
   .card{
-    background:var(--surface);
+    background:#fff;
     border:1px solid var(--line);
-    border-radius:24px;
+    border-radius:12px;
     padding:24px 26px;position:relative;overflow:hidden;
-    box-shadow:
-      0 1px 0 rgba(255,255,255,0.6) inset,
-      0 20px 40px -24px rgba(10,23,51,0.1),
-      0 2px 6px -2px rgba(10,23,51,0.05);
     opacity:0;transform:translateY(10px);
     animation:rise 0.7s cubic-bezier(.2,.8,.2,1) forwards;
-  }
-  /* Atmospheric gradient inside each card — subtle blue wash */
-  .card::before{
-    content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
-    border-radius:inherit;
-    background:
-      radial-gradient(ellipse 60% 50% at 100% 0%, rgba(21,84,255,0.09), transparent 60%),
-      radial-gradient(ellipse 50% 40% at 0% 100%, rgba(147,197,253,0.12), transparent 65%);
-  }
-  .card > *{position:relative;z-index:1}
-  /* Subtle inner gloss highlight at top */
-  .card::after{
-    content:'';position:absolute;top:0;left:10%;right:10%;height:1px;z-index:2;
-    background:linear-gradient(90deg,transparent,rgba(255,255,255,0.9),transparent);
-    pointer-events:none;
   }
   .card:nth-child(1){animation-delay:0.12s}
   .card:nth-child(2){animation-delay:0.18s}
@@ -392,8 +337,8 @@
 
   .nw-chart{
     position:relative;margin-top:24px;margin-bottom:8px;
-    background:linear-gradient(180deg,rgba(21,84,255,0.02),transparent);
-    border-radius:18px;padding:16px 8px 8px;
+    background:transparent;
+    border-radius:12px;padding:16px 8px 8px;
     height:240px;
   }
   .nw-chart svg{width:100%;height:200px;display:block;overflow:visible}
@@ -434,24 +379,10 @@
   /* ==================== VITALS STACK ==================== */
   .vitals-stack{display:flex;flex-direction:column;gap:16px}
   .mini-card{
-    background:var(--surface);
+    background:#fff;
     border:1px solid var(--line);
-    border-radius:24px;padding:22px 24px;
+    border-radius:12px;padding:22px 24px;
     position:relative;overflow:hidden;
-    box-shadow:
-      0 1px 0 rgba(255,255,255,0.6) inset,
-      0 15px 35px -20px rgba(10,23,51,0.08),
-      0 2px 6px -2px rgba(10,23,51,0.04);
-  }
-  .mini-card::before{
-    content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
-    border-radius:inherit;
-    background:radial-gradient(ellipse 80% 60% at 100% 0%, rgba(21,84,255,0.07), transparent 65%);
-  }
-  .mini-card::after{
-    content:'';position:absolute;top:0;left:12%;right:12%;height:1px;z-index:2;
-    background:linear-gradient(90deg,transparent,rgba(255,255,255,0.9),transparent);
-    pointer-events:none;
   }
   .mini-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;position:relative;z-index:1}
   .mini-body{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;position:relative;z-index:1}
@@ -491,7 +422,7 @@
   .wake-input::-webkit-calendar-picker-indicator{filter:invert(1);opacity:0.6}
   .wake-streak{display:flex;gap:4px;margin-top:16px}
   .wake-streak i{flex:1;height:28px;border-radius:6px;background:rgba(255,255,255,0.08);position:relative}
-  .wake-streak i.ok{background:var(--blue);box-shadow:0 2px 8px -2px rgba(21,84,255,0.6)}
+  .wake-streak i.ok{background:var(--blue)}
   .wake-streak i.today{outline:1.5px solid rgba(255,255,255,0.35);outline-offset:2px}
   .wake-label{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.5);margin-top:8px;letter-spacing:0.1em;font-weight:500}
   .wake-avg{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;font-weight:600;text-transform:uppercase;color:rgba(255,255,255,0.8)}
@@ -519,14 +450,9 @@
   .habits-today-head{
     display:flex;align-items:center;gap:18px;
     padding:18px 20px;margin-bottom:16px;
-    background:linear-gradient(135deg,var(--surface-2) 0%,#eef3fb 100%);
-    border:1px solid var(--line);border-radius:16px;position:relative;overflow:hidden;
+    background:var(--surface-2);
+    border:1px solid var(--line);border-radius:12px;position:relative;overflow:hidden;
   }
-  .habits-today-head::before{
-    content:'';position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(ellipse 50% 70% at 100% 50%, rgba(21,84,255,0.08), transparent 70%);
-  }
-  .habits-today-head > *{position:relative;z-index:1}
   .habits-ring-wrap{
     position:relative;width:64px;height:64px;flex-shrink:0;
     display:flex;align-items:center;justify-content:center;
@@ -699,12 +625,7 @@
   .book-cover{
     width:76px;height:108px;border-radius:10px;flex-shrink:0;
     background:var(--blue);position:relative;
-    box-shadow:0 12px 28px -10px rgba(21,84,255,0.4), 0 0 0 1px rgba(0,0,0,0.04);
     display:flex;align-items:center;justify-content:center;padding:10px;overflow:hidden;
-  }
-  .book-cover::before{
-    content:'';position:absolute;inset:0;
-    background:linear-gradient(135deg,rgba(255,255,255,0.25),transparent 50%);
   }
   .book-cover::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:rgba(0,0,0,0.15)}
   .book-cover-text{font-family:'Inter',sans-serif;font-size:11px;color:#fff;text-align:center;line-height:1.2;font-weight:700;letter-spacing:-0.01em;position:relative;z-index:1}
@@ -792,7 +713,7 @@
   .list-add input::placeholder{color:var(--ink-faint)}
   
   .list-empty{
-    padding:24px 10px;text-align:center;color:var(--ink-faint);
+    padding:8px 10px;text-align:center;color:var(--ink-faint);
     font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;
     text-transform:uppercase;font-weight:500;
   }
@@ -833,8 +754,8 @@
   .modal-overlay.active{display:flex;animation:fadein 0.2s ease}
   @keyframes fadein{from{opacity:0}}
   .modal{
-    background:var(--surface);border-radius:24px;padding:28px;width:100%;max-width:400px;
-    box-shadow:0 30px 80px rgba(10,23,51,0.3);
+    background:#fff;border-radius:12px;padding:28px;width:100%;max-width:400px;
+    border:1px solid var(--line);
   }
   .modal h3{font-size:22px;font-weight:800;margin-bottom:16px;letter-spacing:-0.03em}
   .modal input{
@@ -858,18 +779,18 @@
 
   @media (max-width: 1240px){
     .span-4 { grid-column:span 6; }
-    .manifesto-quote{font-size:44px}
+    .manifesto-phrases{font-size:44px}
   }
   @media (max-width: 980px){
     .span-4, .span-6, .span-8 { grid-column:span 12; }
-    .manifesto-quote{font-size:36px}
+    .manifesto-phrases{font-size:36px}
     .topbar{flex-wrap:wrap;gap:12px}
     .topbar-right{flex-wrap:wrap}
   }
   @media (max-width: 640px){
     .app{padding:14px}
-    .manifesto{padding:28px 24px}
-    .manifesto-quote{font-size:28px;line-height:1.15}
+    .manifesto{padding:16px 18px}
+    .manifesto-phrases{font-size:28px;line-height:1.15}
     .manifesto-meta-row{flex-direction:column;align-items:flex-start;gap:14px}
     .manifesto-stats{gap:18px;flex-wrap:wrap}
     .m-stat .v{font-size:22px}
@@ -898,8 +819,8 @@
     .view-tab svg{display:none}
     .view-tabs-alt::before{left:-7px;width:3px;height:3px}
 
-    .card{padding:20px 18px;border-radius:20px}
-    .mini-card{padding:18px 18px;border-radius:20px}
+    .card{padding:20px 18px;border-radius:12px}
+    .mini-card{padding:18px 18px;border-radius:12px}
 
     /* Reading */
     .book-current{flex-direction:column;gap:14px}
@@ -932,7 +853,7 @@
 
   /* Extra-small phones */
   @media (max-width: 380px){
-    .manifesto-quote{font-size:24px}
+    .manifesto-phrases{font-size:24px}
     .nw-amount{font-size:36px}
     .card{padding:16px 14px}
     .habit-day{min-width:22px;height:22px;font-size:9px}
@@ -961,17 +882,9 @@
   .growth-metric:hover{border-color:var(--line-strong)}
   .growth-metric-hero{
     grid-row:span 2;
-    background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 100%);
+    background:var(--blue);
     color:#fff;border-color:var(--blue);
-    box-shadow:0 12px 32px -12px var(--blue-glow);
   }
-  .growth-metric-hero::before{
-    content:'';position:absolute;inset:0;pointer-events:none;
-    background:
-      radial-gradient(ellipse 50% 60% at 90% 10%, rgba(255,255,255,0.25), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 10% 100%, rgba(10,23,51,0.3), transparent 60%);
-  }
-  .growth-metric-hero > *{position:relative;z-index:1}
   .growth-metric-label{
     font-family:'JetBrains Mono',monospace;font-size:10px;
     letter-spacing:0.14em;text-transform:uppercase;font-weight:600;
@@ -1041,7 +954,7 @@
     height:100%;border-radius:999px;
     transition:width 0.6s cubic-bezier(.2,.8,.2,1);
   }
-  .gm-habit-bar-fill.top{background:linear-gradient(90deg,var(--blue),var(--blue-dark))}
+  .gm-habit-bar-fill.top{background:var(--blue)}
   .gm-habit-bar-fill.mid{background:var(--blue)}
   .gm-habit-bar-fill.low{background:rgba(21,84,255,0.5)}
   .gm-habit-bar-fill.cold{background:var(--line-strong)}
@@ -1135,16 +1048,10 @@
   .private-gate-inner{
     max-width:360px;width:100%;text-align:center;
     padding:40px 28px;
-    background:linear-gradient(155deg, #1a1f2e 0%, #0f1420 100%);
-    border:1px solid rgba(255,255,255,0.08);border-radius:20px;
+    background:#1a1f2e;
+    border:1px solid rgba(255,255,255,0.08);border-radius:12px;
     color:#fff;position:relative;overflow:hidden;
-    box-shadow:0 30px 60px -30px rgba(0,0,0,0.4);
   }
-  .private-gate-inner::before{
-    content:'';position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(ellipse 50% 50% at 50% 0%, rgba(255,255,255,0.04), transparent 70%);
-  }
-  .private-gate-inner > *{position:relative;z-index:1}
   .private-gate-icon{
     width:56px;height:56px;margin:0 auto 18px;border-radius:14px;
     background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
@@ -1179,22 +1086,16 @@
 
   /* Shadow card */
   .shadow-card{
-    background:linear-gradient(180deg, #f7f8fa 0%, #eef0f4 100%);
+    background:#fff;
     border:1px solid var(--line);position:relative;
   }
 
   /* Manifesto */
   .shadow-manifesto{
     position:relative;padding:20px 24px;margin-bottom:20px;
-    background:linear-gradient(135deg, #1a1f2e 0%, #0f1420 100%);
-    border-radius:16px;color:#fff;overflow:hidden;
-    box-shadow:0 12px 32px -16px rgba(10,23,51,0.3);
+    background:#1a1f2e;
+    border-radius:12px;color:#fff;overflow:hidden;
   }
-  .shadow-manifesto::before{
-    content:'';position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(ellipse 50% 70% at 100% 0%, rgba(255,255,255,0.05), transparent 60%);
-  }
-  .shadow-manifesto > *{position:relative;z-index:1}
   .shadow-manifesto-kicker{
     font-family:'JetBrains Mono',monospace;font-size:10px;
     color:rgba(255,255,255,0.4);letter-spacing:0.22em;text-transform:uppercase;
@@ -1223,15 +1124,15 @@
 
   /* Counter + actions */
   .shadow-main{
-    display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;
-    padding:20px 24px;background:var(--surface);border:1px solid var(--line);
-    border-radius:16px;margin-bottom:20px;
+    display:flex;align-items:center;gap:16px;
+    padding:14px 18px;background:var(--surface-2);border:1px solid var(--line);
+    border-radius:12px;margin-bottom:16px;
   }
   .shadow-counter{
-    text-align:center;padding:8px 12px;
+    display:flex;align-items:baseline;gap:8px;flex-shrink:0;
   }
   .shadow-counter-num{
-    font-family:'Inter',sans-serif;font-size:64px;font-weight:800;
+    font-family:'Inter',sans-serif;font-size:36px;font-weight:800;
     letter-spacing:-0.04em;color:var(--ink);line-height:1;
   }
   .shadow-counter-num.zero{color:var(--ink-faint)}
@@ -1241,24 +1142,21 @@
   }
   .shadow-counter-sub{
     font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;
-    color:var(--ink-faint);letter-spacing:0.1em;text-transform:uppercase;margin-top:3px;
+    color:var(--ink-faint);letter-spacing:0.1em;text-transform:uppercase;
   }
   .shadow-actions{
-    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    display:flex;gap:8px;margin-left:auto;
   }
   .shadow-btn{
-    padding:16px 18px;border-radius:12px;cursor:pointer;border:none;
-    text-align:left;display:flex;flex-direction:column;gap:4px;
+    padding:10px 16px;border-radius:8px;cursor:pointer;border:none;
+    text-align:left;display:flex;flex-direction:column;gap:2px;
     transition:all 0.2s ease;
     font-family:'Inter',sans-serif;
   }
   .shadow-btn-main{
-    font-size:15px;font-weight:800;letter-spacing:-0.02em;line-height:1.15;
+    font-size:13px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;
   }
-  .shadow-btn-sub{
-    font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;
-    letter-spacing:0.1em;text-transform:uppercase;opacity:0.6;
-  }
+  .shadow-btn-sub{display:none}
   .shadow-btn-clean{
     background:#f2f6f8;color:#1a4d3a;border:1.5px solid #d4e2d9;
   }
@@ -1321,9 +1219,8 @@
   }
 
   @media (max-width:640px){
-    .shadow-main{grid-template-columns:1fr;gap:14px}
-    .shadow-counter-num{font-size:52px}
-    .shadow-actions{grid-template-columns:1fr}
+    .shadow-main{flex-wrap:wrap}
+    .shadow-counter-num{font-size:28px}
     .shadow-manifesto{padding:16px 18px}
     .shadow-manifesto-text{font-size:15px}
     .shadow-timeline{grid-template-columns:repeat(15, 1fr)}
@@ -1332,13 +1229,9 @@
   /* ==================== MORNING COCKPIT ==================== */
   .cockpit{
     position:relative;
-    background:linear-gradient(135deg,#fff 0%,#f5f8ff 100%);
+    background:#fff;
     border:1px solid var(--line);
     padding:0;overflow:hidden;
-  }
-  .cockpit::before{
-    content:'';position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(ellipse 40% 60% at 100% 0%, rgba(21,84,255,0.06), transparent 70%);
   }
   .cockpit-head{
     display:flex;align-items:center;justify-content:space-between;gap:16px;
@@ -1365,9 +1258,8 @@
     background:var(--blue);color:#fff;border:none;
     font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:-0.01em;
     cursor:pointer;transition:all 0.2s ease;
-    box-shadow:0 4px 12px -4px var(--blue-glow);
   }
-  .cockpit-focus-btn:hover{background:var(--blue-dark);transform:translateY(-1px);box-shadow:0 8px 20px -6px var(--blue-glow)}
+  .cockpit-focus-btn:hover{background:var(--blue-dark);transform:translateY(-1px)}
   .cockpit-focus-btn b{font-weight:800;font-family:'JetBrains Mono',monospace;font-size:11.5px}
 
   .cockpit-body{
@@ -1508,14 +1400,8 @@
   /* ==================== FOCUS MODAL ==================== */
   .modal-focus{
     max-width:440px;padding:40px;
-    background:linear-gradient(135deg,#0a1733 0%,var(--navy) 60%,var(--blue-dark) 100%);
+    background:var(--navy);
     color:#fff;position:relative;overflow:hidden;
-  }
-  .modal-focus::before{
-    content:'';position:absolute;inset:0;pointer-events:none;
-    background:
-      radial-gradient(ellipse 50% 60% at 80% 0%, rgba(21,84,255,0.4), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 0% 100%, rgba(21,84,255,0.25), transparent 60%);
   }
   .focus-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:20px}
   .focus-phase-label{
@@ -1623,15 +1509,9 @@
   /* Program header */
   .training-program-header{
     padding:16px 20px;margin-bottom:16px;
-    background:linear-gradient(135deg,var(--navy) 0%,#0a1733 60%,var(--blue-dark) 100%);
-    border-radius:16px;color:#fff;position:relative;overflow:hidden;
-    box-shadow:0 10px 28px -14px rgba(10,23,51,0.4);
+    background:var(--navy);
+    border-radius:12px;color:#fff;position:relative;overflow:hidden;
   }
-  .training-program-header::before{
-    content:'';position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(ellipse 60% 70% at 90% 20%, rgba(21,84,255,0.4), transparent 60%);
-  }
-  .training-program-header > *{position:relative;z-index:1}
   .training-program-name{
     font-size:18px;font-weight:800;letter-spacing:-0.025em;color:#fff;
   }
@@ -1864,17 +1744,9 @@
 
   .playbook-hero{
     padding:24px 28px;margin:0 -6px 24px;
-    background:linear-gradient(135deg,var(--navy) 0%,#0a1733 60%,var(--blue-dark) 100%);
-    border-radius:20px;color:#fff;position:relative;overflow:hidden;
-    box-shadow:0 16px 40px -20px rgba(10,23,51,0.5);
+    background:var(--navy);
+    border-radius:12px;color:#fff;position:relative;overflow:hidden;
   }
-  .playbook-hero::before{
-    content:'';position:absolute;inset:0;pointer-events:none;
-    background:
-      radial-gradient(ellipse 50% 60% at 90% 20%, rgba(21,84,255,0.45), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 10% 100%, rgba(21,84,255,0.25), transparent 60%);
-  }
-  .playbook-hero > *{position:relative;z-index:1}
   .playbook-hero-kicker{
     font-family:'JetBrains Mono',monospace;font-size:10px;
     letter-spacing:0.22em;color:rgba(255,255,255,0.55);font-weight:600;
@@ -1885,7 +1757,7 @@
     display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;
   }
   .pb-hero-1{color:#fff}
-  .pb-hero-2{color:#4fb3ff;background:linear-gradient(90deg,#4fb3ff,#7cc5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .pb-hero-2{color:#4fb3ff}
   .pb-hero-3{color:rgba(255,255,255,0.85);font-weight:700}
   .pb-sep{color:rgba(255,255,255,0.3);font-weight:400}
   .playbook-hero-sub{
@@ -2037,9 +1909,8 @@
   .dot-popover{
     position:fixed;z-index:900;
     width:320px;max-width:calc(100vw - 24px);
-    background:var(--surface);border:1px solid var(--line-strong);border-radius:16px;
+    background:#fff;border:1px solid var(--line-strong);border-radius:12px;
     padding:16px 18px 14px;
-    box-shadow:0 24px 60px -20px rgba(10,23,51,0.35), 0 2px 8px -2px rgba(10,23,51,0.15);
     opacity:0;transform:translateY(-4px) scale(0.98);pointer-events:none;
     transition:opacity 0.18s ease, transform 0.18s cubic-bezier(.2,.8,.2,1);
   }
@@ -2088,7 +1959,7 @@
   }
   .dot-popover-score-fill{
     height:100%;border-radius:999px;
-    background:linear-gradient(90deg,var(--blue),var(--blue-dark));
+    background:var(--blue);
     transition:width 0.4s cubic-bezier(.2,.8,.2,1);
   }
   .dot-popover-score-label{
@@ -2162,7 +2033,7 @@
   .year-dot.filled-1{background:rgba(21,84,255,0.25);border-color:transparent}
   .year-dot.filled-2{background:rgba(21,84,255,0.45);border-color:transparent}
   .year-dot.filled-3{background:rgba(21,84,255,0.7);border-color:transparent}
-  .year-dot.filled-4{background:var(--blue);border-color:transparent;box-shadow:0 1px 4px -1px rgba(21,84,255,0.4)}
+  .year-dot.filled-4{background:var(--blue);border-color:transparent}
   .year-legend{
     display:flex;justify-content:space-between;padding:0 2px;
     font-size:9px;color:var(--ink-faint);letter-spacing:0.14em;
@@ -2225,20 +2096,41 @@
     letter-spacing:0.14em;text-transform:uppercase;font-weight:600;
     display:flex;align-items:center;gap:8px;
     opacity:0;transform:translateY(10px);transition:all 0.3s ease;
-    box-shadow:0 12px 28px -8px rgba(10,23,51,0.3);
   }
   .save-pill.show{opacity:1;transform:translateY(0)}
-  .save-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(24,178,107,0.25)}
+  .save-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+
+  /* ==================== PANEL REORDER ==================== */
+  .panel-arrows{display:flex;gap:2px;margin-left:6px}
+  .panel-arrow{
+    width:22px;height:22px;border-radius:6px;border:1px solid var(--line);
+    background:transparent;color:var(--ink-faint);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;line-height:1;transition:all 0.15s ease;padding:0;
+  }
+  .panel-arrow:hover{background:var(--surface-2);color:var(--ink);border-color:var(--ink-dim)}
+
+  /* ==================== HEATMAP ==================== */
+  .heatmap{
+    display:grid;gap:3px;
+  }
+  .heatmap-cell{
+    aspect-ratio:1;border-radius:3px;
+    background:var(--line);
+  }
+  .heatmap-cell.future{opacity:0.3}
+  .heatmap-cell.l1{background:rgba(21,84,255,0.2)}
+  .heatmap-cell.l2{background:rgba(21,84,255,0.4)}
+  .heatmap-cell.l3{background:rgba(21,84,255,0.65)}
+  .heatmap-cell.l4{background:var(--blue)}
+  .heatmap-cell.today{outline:2px solid var(--blue);outline-offset:-1px}
 
   /* ==================== VIEW TABS ==================== */
   .view-tabs{
-    display:flex;border:1px solid var(--glass-border);border-radius:999px;
+    display:flex;border:1px solid var(--line-strong);border-radius:999px;
     padding:3px;gap:2px;
-    background:rgba(255,255,255,0.55);
-    backdrop-filter:blur(12px) saturate(160%);
-    -webkit-backdrop-filter:blur(12px) saturate(160%);
+    background:#fff;
     margin-right:8px;
-    box-shadow:0 1px 0 rgba(255,255,255,0.6) inset, 0 2px 6px -2px rgba(10,23,51,0.06);
   }
   /* Growth pill alone, visually distinct — slight gap, separator dot */
   .view-tabs-alt{
@@ -2289,51 +2181,17 @@
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 9l3-3 3 2 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 3h4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Finance
         </button>
-      </div>
-      <div class="view-tabs view-tabs-alt">
-        <button class="view-tab" data-view="growth">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M3 9V6M6 9V3M9 9V7M12 9V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          Growth
-        </button>
-      </div>
-      <div class="view-tabs view-tabs-private">
-        <button class="view-tab" data-view="private" title="Private">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2.5" y="6" width="9" height="6.5" rx="1.2" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 6V4a2.5 2.5 0 015 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <button class="view-tab" data-view="sante">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 12.5s-5.5-3.5-5.5-7A3 3 0 017 3.5a3 3 0 015.5 2c0 3.5-5.5 7-5.5 7z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          Sante
         </button>
       </div>
       <button class="pill-btn cloud-status cloud-offline" id="cloud-status" title="Cloud sync status · click for options">Offline</button>
       <button class="pill-btn"><span class="status-dot"></span><span id="hdr-date">—</span></button>
       <button class="pill-btn dark"><span id="hdr-day">—</span> · <span id="hdr-time">—</span></button>
-    </div>
-  </div>
-
-  <!-- MANIFESTO HERO -->
-  <div class="manifesto">
-    <div class="manifesto-deco"></div>
-    <div class="manifesto-content">
-      <div class="manifesto-kicker">
-        <span class="dot"></span>
-        Personal manifesto
-      </div>
-      <div class="manifesto-quote" id="manifesto-quote">Take life seriously.<span class="sep">/</span>Unbothered, happy in my <em>own lane</em>.<span class="sep">/</span>Push yourself.<span class="sep">/</span>It's cringe until <em>you win</em>.<span class="sep">/</span>Consistency.</div>
-      <div class="manifesto-meta-row">
-        <div class="manifesto-stats">
-          <div class="m-stat">
-            <div class="v"><em id="stat-age">—</em></div>
-            <div class="k">Age · Y · D</div>
-          </div>
-          <div class="m-stat">
-            <div class="v"><em id="stat-day">—</em></div>
-            <div class="k">Day of Year</div>
-          </div>
-        </div>
-        <div class="manifesto-edit-hint">
-          <button class="manifesto-edit-btn" id="manifesto-edit-btn" title="Edit manifesto">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8.5 1.5l3 3L4 12H1V9L8.5 1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-            Edit
-          </button>
-        </div>
-      </div>
+      <button class="pill-btn"><em id="stat-age" style="font-style:normal;color:var(--blue);font-weight:800">—</em> <span style="color:var(--ink-faint);margin:0 4px">·</span> <span style="font-size:10px;color:var(--ink-dim)">age</span></button>
+      <button class="pill-btn"><em id="stat-day-ratio" style="font-style:normal;color:var(--blue);font-weight:800">—</em> <span style="color:var(--ink-faint);margin:0 4px">·</span> <span style="font-size:10px;color:var(--ink-dim)">jour</span></button>
+      <button class="pill-btn"><em id="stat-streak" style="font-style:normal;color:var(--green);font-weight:800">0</em> <span style="color:var(--ink-faint);margin:0 4px">·</span> <span style="font-size:10px;color:var(--ink-dim)">streak</span></button>
     </div>
   </div>
 
@@ -2359,12 +2217,6 @@
           <div class="nw-total-label">Total across all accounts</div>
           <div class="nw-amount"><span class="cur" id="nw-cur">€</span><span id="nw-amount-num">0</span></div>
           <div class="nw-delta neutral" id="nw-delta">Add your first account</div>
-        </div>
-        <div class="nw-chart-range" id="nw-range">
-          <button data-range="30" class="active">30D</button>
-          <button data-range="90">90D</button>
-          <button data-range="365">1Y</button>
-          <button data-range="all">All</button>
         </div>
       </div>
 
@@ -2410,122 +2262,13 @@
       </div>
     </div>
 
-    <!-- 02 · TRADING PLAYBOOK -->
-    <div class="card playbook span-12" id="playbook-card">
+    <!-- 02 · CRYPTO NOTES -->
+    <div class="card span-12">
       <div class="label">
-        <span class="label-text">02 · Trading Playbook</span>
-        <div style="display:flex;align-items:center;gap:12px">
-          <span class="label-tag" id="playbook-tag"><span class="dot" style="background:var(--blue)"></span> My edge · click any field to edit</span>
-          <button class="pill-btn" id="playbook-toggle" style="height:32px;padding:0 14px;font-size:11px">
-            <span id="playbook-toggle-label">Hide</span>
-            <svg id="playbook-toggle-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" style="margin-left:2px"><path d="M1 3.5L5 7.5L9 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </div>
+        <span class="label-text">02 · Crypto · Strat & notes</span>
+        <span class="label-tag"><span class="dot" style="background:var(--blue)"></span> Invest</span>
       </div>
-
-      <div class="playbook-body" id="playbook-body">
-      <div class="playbook-hero">
-        <div class="playbook-hero-kicker">THE SETUP</div>
-        <div class="playbook-hero-line">
-          <span class="pb-hero-1">Swing trade</span>
-          <span class="pb-sep">·</span>
-          <span class="pb-hero-2">altcoin recovery start</span>
-          <span class="pb-sep">·</span>
-          <span class="pb-hero-3">Asia/Europe hours</span>
-        </div>
-        <div class="playbook-hero-sub">
-          If all five ingredients align, take the trade. If one is missing, stand down.
-        </div>
-      </div>
-
-      <div class="playbook-grid">
-        <!-- 1. ASSET -->
-        <div class="pb-item">
-          <div class="pb-num">01</div>
-          <div class="pb-content">
-            <div class="pb-label">The asset · <span class="pb-label-hint">one per market</span></div>
-            <div class="pb-fields">
-              <div class="pb-field">
-                <div class="pb-field-label">CRYPTO</div>
-                <input class="pb-input pb-input-ticker" id="pb-asset-crypto" data-pb="asset_crypto" spellcheck="false">
-              </div>
-              <div class="pb-field">
-                <div class="pb-field-label">INDEX</div>
-                <input class="pb-input pb-input-ticker" id="pb-asset-index" data-pb="asset_index" spellcheck="false">
-              </div>
-            </div>
-            <div class="pb-note">One conviction per market. Don't spread focus across pairs.</div>
-          </div>
-        </div>
-
-        <!-- 2. STYLE -->
-        <div class="pb-item">
-          <div class="pb-num">02</div>
-          <div class="pb-content">
-            <div class="pb-label">The style · <span class="pb-label-hint">time horizon</span></div>
-            <input class="pb-input pb-input-full" id="pb-style" data-pb="style" spellcheck="false">
-            <div class="pb-note">My edge exists only inside this time window. Scalping and long-hold are out of scope.</div>
-          </div>
-        </div>
-
-        <!-- 3. MACRO -->
-        <div class="pb-item pb-item-wide">
-          <div class="pb-num">03</div>
-          <div class="pb-content">
-            <div class="pb-label">The macro timing · <span class="pb-label-hint">TOTAL3 regime</span></div>
-            <textarea class="pb-input pb-input-multi" id="pb-macro" data-pb="macro" rows="3" spellcheck="false"></textarea>
-          </div>
-        </div>
-
-        <!-- 4. SESSION -->
-        <div class="pb-item">
-          <div class="pb-num">04</div>
-          <div class="pb-content">
-            <div class="pb-label">The session · <span class="pb-label-hint">when to be awake</span></div>
-            <input class="pb-input pb-input-full" id="pb-session" data-pb="session" spellcheck="false">
-            <div class="pb-clock">
-              <div class="pb-clock-band">
-                <div class="pb-clock-hour pb-clock-on" style="left:0%">00</div>
-                <div class="pb-clock-hour pb-clock-on" style="left:16.6%">04</div>
-                <div class="pb-clock-hour pb-clock-on" style="left:33.3%">08</div>
-                <div class="pb-clock-hour pb-clock-on" style="left:50%">12</div>
-                <div class="pb-clock-hour pb-clock-on" style="left:66.6%">16</div>
-                <div class="pb-clock-hour pb-clock-on" style="left:83.3%">20</div>
-                <div class="pb-clock-cutoff" style="left:91.6%">
-                  <div class="pb-clock-cutoff-line"></div>
-                  <div class="pb-clock-cutoff-label">22:00 CUTOFF</div>
-                </div>
-              </div>
-              <div class="pb-clock-legend">
-                <span><span class="pb-clock-swatch on"></span> In my window</span>
-                <span><span class="pb-clock-swatch off"></span> Out · worst trade was at 23:36</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 5. SIZING -->
-        <div class="pb-item">
-          <div class="pb-num">05</div>
-          <div class="pb-content">
-            <div class="pb-label">The sizing · <span class="pb-label-hint">position cap</span></div>
-            <input class="pb-input pb-input-full" id="pb-sizing" data-pb="sizing" spellcheck="false">
-            <div class="pb-note">Below this cap, execution stays clean. Above, emotion takes over.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="playbook-footer">
-        <div class="playbook-checklist">
-          <div class="playbook-checklist-title">Pre-trade checklist · all must be YES</div>
-          <label class="pb-check"><input type="checkbox"> Correct asset for the market</label>
-          <label class="pb-check"><input type="checkbox"> Swing horizon (3-14 days)</label>
-          <label class="pb-check"><input type="checkbox"> TOTAL3 in early recovery</label>
-          <label class="pb-check"><input type="checkbox"> Asia/Europe session · before 22:00 Brussels</label>
-          <label class="pb-check"><input type="checkbox"> Notional under cap</label>
-        </div>
-      </div>
-      </div><!-- /playbook-body -->
+      <textarea id="crypto-notes" rows="6" spellcheck="false" placeholder="Mes notes d'investissement crypto..." style="width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:14px 16px;color:var(--ink);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;line-height:1.6;letter-spacing:-0.005em;outline:none;resize:vertical;min-height:100px"></textarea>
     </div>
 
     </div>
@@ -2533,103 +2276,52 @@
 
   <!-- DASHBOARD VIEW -->
   <div class="view view-dashboard" id="view-dashboard">
+
+    <!-- MANIFESTO -->
+    <div class="manifesto">
+      <div class="manifesto-content">
+        <div class="manifesto-kicker">
+          <span class="dot"></span>
+          Personal manifesto
+        </div>
+        <div class="manifesto-phrases" id="manifesto-phrases"></div>
+        <div style="margin-top:16px">
+          <button class="manifesto-edit-btn" id="manifesto-edit-btn" title="Edit manifesto">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8.5 1.5l3 3L4 12H1V9L8.5 1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            Edit
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEATMAP -->
+    <div class="card" style="padding:14px 18px;margin-bottom:16px;border-radius:12px">
+      <div class="label" style="margin-bottom:10px">
+        <span class="label-text">Activity · <span id="heatmap-year">—</span></span>
+        <span class="label-tag"><span id="heatmap-active">0</span> active days</span>
+      </div>
+      <div class="heatmap" id="heatmap"></div>
+    </div>
+
     <div class="grid">
 
-    <!-- MORNING COCKPIT -->
-    <div class="card cockpit span-12" id="cockpit-card">
-      <div class="cockpit-head">
-        <div class="cockpit-head-left">
-          <div class="cockpit-kicker">
-            <span class="cockpit-sun" id="cockpit-sun">☀</span>
-            <span id="cockpit-greeting">Morning</span>
-            <span class="cockpit-divider">·</span>
-            <span id="cockpit-date">—</span>
-          </div>
-          <div class="cockpit-subtitle">Today's focus, at a glance</div>
-        </div>
-        <div class="cockpit-head-right">
-          <button class="cockpit-focus-btn" id="cockpit-focus-btn" title="Start a focus session">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.3"/><path d="M6 3.5V6l1.8 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-            <span>Focus · <b id="cockpit-focus-total">0</b>m today</span>
-          </button>
-          <button class="pill-btn" id="cockpit-toggle" title="Hide cockpit" style="height:32px;padding:0 12px;font-size:11px">
-            <span id="cockpit-toggle-label">Hide</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="cockpit-body" id="cockpit-body">
-        <div class="cockpit-grid">
-          <!-- Priority task -->
-          <div class="cockpit-tile cockpit-tile-task">
-            <div class="cockpit-tile-label">
-              <span class="cockpit-tile-num">01</span>
-              Priority task
-            </div>
-            <div class="cockpit-task-content" id="cockpit-task-content"></div>
-          </div>
-
-          <!-- Gym day -->
-          <div class="cockpit-tile cockpit-tile-gym">
-            <div class="cockpit-tile-label">
-              <span class="cockpit-tile-num">02</span>
-              Gym today
-            </div>
-            <div class="cockpit-gym-content" id="cockpit-gym-content"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- VITALS STACK -->
-    <div class="vitals-stack span-4">
-      <!-- 02 WEIGHT -->
-      <div class="mini-card weight-card">
-        <div class="mini-head">
-          <span class="label-text">02 · Weight</span>
-          <span class="label-tag" id="weight-date">Today</span>
-        </div>
-        <div class="mini-body">
-          <div>
-            <div class="weight-val-wrap">
-              <input type="number" step="0.1" class="weight-input" id="weight-input" placeholder="—">
-              <span class="weight-unit">kg</span>
-            </div>
-            <div class="weight-delta" id="weight-delta">Track to see trend</div>
-          </div>
-          <svg class="weight-spark" viewBox="0 0 160 60" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="wg" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stop-color="#1554ff" stop-opacity="0.25"/>
-                <stop offset="100%" stop-color="#1554ff" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <path id="weight-path-fill" d="" fill="url(#wg)"/>
-            <path id="weight-path" d="" fill="none" stroke="#1554ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle id="weight-dot" cx="0" cy="0" r="0" fill="#1554ff" stroke="#fff" stroke-width="2"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-
-    <!-- 04 HABITS -->
-    <div class="card habits span-8">
+    <!-- HABITS -->
+    <div class="card habits span-12" data-panel="habits">
       <div class="label">
-        <span class="label-text">03 · Habits · <span id="habits-today-label">Today</span></span>
+        <span class="label-text">Habits · <span id="habits-today-label">Today</span></span>
         <div style="display:flex;align-items:center;gap:10px">
           <span class="label-tag" id="habits-progress-tag"><b id="habits-done-today">0</b>/<span id="habits-total-today">0</span> done today</span>
           <div class="habits-tabs-new">
-            <button class="active" data-section="beta">
+            <button data-section="beta">
               Beta <span class="count" id="beta-count">0</span>
             </button>
-            <button data-section="perm">
+            <button class="active" data-section="perm">
               Locked <span class="count" id="perm-count">0</span>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Today's progress ring + summary -->
       <div class="habits-today-head">
         <div class="habits-ring-wrap">
           <svg class="habits-ring" viewBox="0 0 64 64">
@@ -2644,10 +2336,8 @@
         </div>
       </div>
 
-      <!-- Today's checklist -->
       <div id="habits-today-list"></div>
 
-      <!-- 6-day history mini heatmap -->
       <div class="habits-history-wrap" id="habits-history-wrap">
         <div class="habits-history-title">Last 7 days</div>
         <div class="habits-history" id="habits-history"></div>
@@ -2658,83 +2348,10 @@
       </div>
     </div>
 
-    <!-- 04 READING -->
-    <div class="card reading span-4">
+    <!-- TASKS -->
+    <div class="card todo span-12" data-panel="tasks">
       <div class="label">
-        <span class="label-text">04 · Reading</span>
-        <span class="label-tag"><span class="dot" style="background:var(--blue)"></span>In progress</span>
-      </div>
-      <div class="book-current">
-        <div class="book-cover" id="book-cover">
-          <span class="book-cover-text" id="book-cover-text">No book</span>
-        </div>
-        <div class="book-info">
-          <input class="book-title-input" id="book-title" placeholder="Book title…">
-          <input class="book-author-input" id="book-author" placeholder="Author">
-          <div class="book-progress">
-            <div class="book-progress-row">
-              <div class="book-pages">
-                <input type="number" id="book-current-page" placeholder="0"> /
-                <input type="number" id="book-total-pages" placeholder="0">
-                <span style="margin-left:4px">pages</span>
-              </div>
-              <span class="book-percent" id="book-percent">0%</span>
-            </div>
-            <div class="book-bar"><i id="book-bar-fill" style="width:0%"></i></div>
-          </div>
-        </div>
-      </div>
-      <button class="finish-btn" id="finish-book">Mark as finished →</button>
-      <div class="reading-stats">
-        <div class="reading-stat">
-          <div class="k">This year</div>
-          <div class="v" id="books-ytd">0</div>
-        </div>
-        <div class="reading-stat accent">
-          <div class="k">Goal · 2026</div>
-          <div class="v"><input type="number" id="books-goal" value="24"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 05 TRAINING -->
-    <div class="card training span-12" id="training-card">
-      <div class="label">
-        <span class="label-text">05 · Training · Current program</span>
-        <div style="display:flex;align-items:center;gap:12px">
-          <span class="label-tag"><span class="dot" style="background:var(--blue)"></span> My routine · no friction</span>
-          <button class="pill-btn" id="training-edit-btn" style="height:32px;padding:0 14px;font-size:11px">
-            <svg width="12" height="12" viewBox="0 0 13 13" fill="none" style="margin-right:4px;vertical-align:-1px"><path d="M8.5 1.5l3 3L4 12H1V9L8.5 1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-            Edit program
-          </button>
-        </div>
-      </div>
-
-      <!-- Program header -->
-      <div class="training-program-header" id="training-program-header">
-        <div class="training-program-name" id="training-program-name">Current program</div>
-        <div class="training-program-notes" id="training-program-notes"></div>
-      </div>
-
-      <!-- Days of the week / split days — horizontal picker -->
-      <div class="training-day-tabs" id="training-day-tabs"></div>
-
-      <!-- Active day detail -->
-      <div class="training-day-detail" id="training-day-detail"></div>
-
-      <!-- Empty state -->
-      <div class="training-empty-state" id="training-empty-state" style="display:none">
-        <div class="training-empty-illus">🏋️</div>
-        <div class="training-empty-title">No program set up yet</div>
-        <div class="training-empty-sub">Pin your gym routine so you never have to think « what do I train today » again.</div>
-        <button class="pill-btn blue" id="training-setup-btn" style="margin-top:14px">Set up my program</button>
-      </div>
-    </div>
-
-    <!-- 06 TASKS -->
-    <div class="card todo span-12">
-      <div class="label">
-        <span class="label-text">06 · Tasks</span>
+        <span class="label-text">Tasks</span>
         <div style="display:flex;align-items:center;gap:12px">
           <span class="label-tag" id="todo-count">0 open</span>
           <button class="pill-btn" id="add-list-btn" style="height:32px;padding:0 14px;font-size:11px">+ New list</button>
@@ -2747,209 +2364,82 @@
   </div>
 
   <!-- GROWTH VIEW -->
-  <div class="view view-growth" id="view-growth" style="display:none">
+  <!-- Growth view removed -->
+
+  <!-- SANTE VIEW -->
+  <div class="view view-sante" id="view-sante" style="display:none">
     <div class="grid">
 
-    <!-- GROWTH ANALYTICS HERO -->
-    <div class="card growth-hero span-12">
+    <!-- S1 WEIGHT -->
+    <div class="card span-6">
       <div class="label">
-        <span class="label-text">G1 · Your momentum, in numbers</span>
-        <span class="label-tag"><span class="dot"></span> LIVE</span>
+        <span class="label-text">S1 · Weight</span>
+        <span class="label-tag" id="weight-date">Today</span>
       </div>
-
-      <div class="growth-hero-grid">
-        <!-- Consistency score -->
-        <div class="growth-metric growth-metric-hero">
-          <div class="growth-metric-label">Consistency Score · 30D</div>
-          <div class="growth-metric-value">
-            <span id="gm-consistency">0</span><span class="growth-metric-unit">/100</span>
+      <div class="mini-body">
+        <div>
+          <div class="weight-val-wrap">
+            <input type="number" step="0.1" class="weight-input" id="weight-input" placeholder="—">
+            <span class="weight-unit">kg</span>
           </div>
-          <div class="growth-bar">
-            <div class="growth-bar-fill" id="gm-consistency-bar" style="width:0%"></div>
-          </div>
-          <div class="growth-metric-sub" id="gm-consistency-sub">Start cocher des habitudes</div>
+          <div class="weight-delta" id="weight-delta">Track to see trend</div>
         </div>
-
-        <!-- Best streak -->
-        <div class="growth-metric">
-          <div class="growth-metric-label">Best Active Streak</div>
-          <div class="growth-metric-value">
-            <span id="gm-streak">0</span><span class="growth-metric-unit">d</span>
-          </div>
-          <div class="growth-metric-sub" id="gm-streak-sub">—</div>
-        </div>
-
-        <!-- Active days this year -->
-        <div class="growth-metric">
-          <div class="growth-metric-label">Active Days · Year</div>
-          <div class="growth-metric-value">
-            <span id="gm-active-year">0</span><span class="growth-metric-unit">/365</span>
-          </div>
-          <div class="growth-metric-sub" id="gm-active-year-sub">0%</div>
-        </div>
-
-        <!-- Weight delta -->
-        <div class="growth-metric">
-          <div class="growth-metric-label">Weight · 30D</div>
-          <div class="growth-metric-value">
-            <span id="gm-weight-delta">—</span><span class="growth-metric-unit" id="gm-weight-unit"></span>
-          </div>
-          <div class="growth-metric-sub" id="gm-weight-sub">No data yet</div>
-        </div>
-
-        <!-- Books read -->
-        <div class="growth-metric">
-          <div class="growth-metric-label">Books Read</div>
-          <div class="growth-metric-value">
-            <span id="gm-books">0</span><span class="growth-metric-unit">/<span id="gm-books-goal">24</span></span>
-          </div>
-          <div class="growth-bar">
-            <div class="growth-bar-fill" id="gm-books-bar" style="width:0%"></div>
-          </div>
-          <div class="growth-metric-sub" id="gm-books-sub">0% of yearly goal</div>
-        </div>
-
-        <!-- Habits locked in -->
-        <div class="growth-metric">
-          <div class="growth-metric-label">Locked-in Habits</div>
-          <div class="growth-metric-value">
-            <span id="gm-habits-locked">0</span><span class="growth-metric-unit">core</span>
-          </div>
-          <div class="growth-metric-sub" id="gm-habits-sub">0 in beta testing</div>
-        </div>
-      </div>
-
-      <!-- Per-habit completion bars -->
-      <div class="growth-habits-section" id="gm-habits-section">
-        <div class="growth-section-title">Last 30 days · per habit</div>
-        <div class="growth-habits-list" id="gm-habits-list"></div>
+        <svg class="weight-spark" viewBox="0 0 160 60" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="wg" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="#1554ff" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#1554ff" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path id="weight-path-fill" d="" fill="url(#wg)"/>
+          <path id="weight-path" d="" fill="none" stroke="#1554ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle id="weight-dot" cx="0" cy="0" r="0" fill="#1554ff" stroke="#fff" stroke-width="2"/>
+        </svg>
       </div>
     </div>
 
-    <!-- G2 YEAR DOTS -->
-    <div class="card year-dots span-12">
+    <!-- S2 TRAINING -->
+    <div class="card training span-6" id="training-card">
       <div class="label">
-        <span class="label-text">G2 · Year <span id="year-label">—</span> · 365 days</span>
-        <span class="label-tag"><span id="year-days-done">0</span> active · today is <span id="year-today-dot">—</span></span>
-      </div>
-      <div class="year-grid" id="year-grid"></div>
-      <div class="year-legend">
-        <span class="mono">Jan</span>
-        <span class="mono">Mar</span>
-        <span class="mono">May</span>
-        <span class="mono">Jul</span>
-        <span class="mono">Sep</span>
-        <span class="mono">Nov</span>
-      </div>
-    </div>
-
-    <!-- G3 REFLECTION -->
-    <div class="card reflection span-12">
-      <div class="label">
-        <span class="label-text">G3 · Weekly Reflection</span>
-        <span class="label-tag" id="reflection-week">—</span>
-      </div>
-      <div class="reflection-grid">
-        <div class="reflection-q">
-          <label>What worked this week?</label>
-          <textarea id="refl-worked" placeholder="…" rows="3"></textarea>
-        </div>
-        <div class="reflection-q">
-          <label>What didn't?</label>
-          <textarea id="refl-didnt" placeholder="…" rows="3"></textarea>
-        </div>
-        <div class="reflection-q">
-          <label>Focus next week</label>
-          <textarea id="refl-next" placeholder="…" rows="3"></textarea>
-        </div>
-      </div>
-      <button class="reflection-archive" id="refl-archive">View past weeks →</button>
-    </div>
-
-    </div>
-  </div>
-
-  <!-- PRIVATE VIEW -->
-  <div class="view view-private" id="view-private" style="display:none">
-    <!-- Gate (unlock screen) -->
-    <div class="private-gate" id="private-gate">
-      <div class="private-gate-inner">
-        <div class="private-gate-icon">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <rect x="5" y="12" width="18" height="13" rx="2.4" stroke="currentColor" stroke-width="1.6"/>
-            <path d="M9 12V8a5 5 0 0110 0v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="private-gate-title">Private space</div>
-        <div class="private-gate-sub">A quiet corner. For your eyes only.</div>
-        <input type="password" class="private-gate-input" id="private-gate-input" placeholder="Enter passcode" autocomplete="off" spellcheck="false">
-        <div class="private-gate-error" id="private-gate-error"></div>
-        <button class="pill-btn blue" id="private-gate-submit" style="width:100%;margin-top:12px">Unlock</button>
-        <div class="private-gate-setup" id="private-gate-setup"></div>
-      </div>
-    </div>
-
-    <!-- Content (hidden until unlocked) -->
-    <div class="grid private-content" id="private-content" style="display:none">
-      <!-- 01 · THE SHADOW -->
-      <div class="card shadow-card span-12">
-        <div class="label">
-          <span class="label-text">01 · The Shadow</span>
-          <div style="display:flex;align-items:center;gap:10px">
-            <span class="label-tag"><span class="dot" style="background:#6b7280"></span> Private · you own this</span>
-            <button class="pill-btn" id="shadow-lock-btn" style="height:32px;padding:0 12px;font-size:11px" title="Lock and exit">
-              <svg width="11" height="11" viewBox="0 0 14 14" fill="none" style="margin-right:4px;vertical-align:-1px"><rect x="2.5" y="6" width="9" height="6.5" rx="1.2" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 6V4a2.5 2.5 0 015 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-              Lock
-            </button>
-          </div>
-        </div>
-
-        <!-- Manifesto -->
-        <div class="shadow-manifesto" id="shadow-manifesto-wrap">
-          <div class="shadow-manifesto-kicker">
-            <span class="dot"></span>
-            Personal reminder
-          </div>
-          <div class="shadow-manifesto-text" id="shadow-manifesto-text"></div>
-          <button class="shadow-manifesto-edit" id="shadow-manifesto-edit" title="Edit">
-            <svg width="12" height="12" viewBox="0 0 13 13" fill="none"><path d="M8.5 1.5l3 3L4 12H1V9L8.5 1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        <span class="label-text">S2 · Training</span>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span class="label-tag"><span class="dot" style="background:var(--blue)"></span> My routine</span>
+          <button class="pill-btn" id="training-edit-btn" style="height:32px;padding:0 14px;font-size:11px">
+            <svg width="12" height="12" viewBox="0 0 13 13" fill="none" style="margin-right:4px;vertical-align:-1px"><path d="M8.5 1.5l3 3L4 12H1V9L8.5 1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            Edit
           </button>
         </div>
-
-        <!-- Counter + actions -->
-        <div class="shadow-main">
-          <div class="shadow-counter">
-            <div class="shadow-counter-num" id="shadow-counter-num">—</div>
-            <div class="shadow-counter-unit" id="shadow-counter-unit">days since last</div>
-            <div class="shadow-counter-sub" id="shadow-counter-sub">Not tracked yet</div>
-          </div>
-          <div class="shadow-actions">
-            <button class="shadow-btn shadow-btn-clean" id="shadow-btn-clean">
-              <div class="shadow-btn-main">Clean today</div>
-              <div class="shadow-btn-sub">I stayed on my path</div>
-            </button>
-            <button class="shadow-btn shadow-btn-slip" id="shadow-btn-slip">
-              <div class="shadow-btn-main">Slipped today</div>
-              <div class="shadow-btn-sub">Honest · no shame</div>
-            </button>
-          </div>
-        </div>
-
-        <!-- 30-day timeline -->
-        <div class="shadow-timeline-wrap">
-          <div class="shadow-timeline-head">
-            <div class="shadow-timeline-title">Last 30 days</div>
-            <div class="shadow-timeline-legend">
-              <span><span class="swatch clean"></span> Clean</span>
-              <span><span class="swatch slip"></span> Slip</span>
-              <span><span class="swatch untracked"></span> Untracked</span>
-            </div>
-          </div>
-          <div class="shadow-timeline" id="shadow-timeline"></div>
-          <div class="shadow-stats" id="shadow-stats"></div>
-        </div>
-
       </div>
+      <div class="training-program-header" id="training-program-header">
+        <div class="training-program-name" id="training-program-name">Current program</div>
+        <div class="training-program-notes" id="training-program-notes"></div>
+      </div>
+      <div class="training-day-tabs" id="training-day-tabs"></div>
+      <div class="training-day-detail" id="training-day-detail"></div>
+      <div class="training-empty-state" id="training-empty-state" style="display:none">
+        <div class="training-empty-title">No program set up yet</div>
+        <button class="pill-btn blue" id="training-setup-btn" style="margin-top:14px">Set up my program</button>
+      </div>
+    </div>
+
+    <!-- S3 THE SHADOW (addiction tracker) -->
+    <div class="card shadow-card span-12">
+      <div class="label">
+        <span class="label-text">S3 · The Shadow</span>
+        <span class="label-tag">Tracker</span>
+      </div>
+
+      <div class="shadow-main">
+        <div class="shadow-counter">
+          <div class="shadow-counter-num" id="shadow-counter-num">—</div>
+          <div class="shadow-counter-unit" id="shadow-counter-unit">days since last</div>
+          <div class="shadow-counter-sub" id="shadow-counter-sub">Not tracked yet</div>
+        </div>
+      </div>
+
+      <div class="shadow-timeline" id="shadow-timeline"></div>
+    </div>
+
     </div>
   </div>
 
@@ -3335,7 +2825,8 @@ async function cloudPush(key, value){
       setCloudStatus('idle');
     }catch(e){
       console.warn('Cloud push failed:', e);
-      setCloudStatus('error');
+      // Don't show error for transient failures — retry on next save
+      setCloudStatus('idle');
     }
   }, 400);
 }
@@ -3359,7 +2850,7 @@ async function cloudPullAll(){
     return rows || [];
   }catch(e){
     console.warn('Cloud pull failed:', e);
-    setCloudStatus('error');
+    setCloudStatus('idle');
     return null;
   }
 }
@@ -3389,10 +2880,8 @@ const CHUNK_PAYLOADS = {
     chartRange: state.chartRange,
     activeView: state.activeView,
     manifesto: state.manifesto,
-    booksGoal: state.booksGoal,
-    booksYtd: state.booksYtd,
-    book: state.book,
-    tradingPlaybook: state.tradingPlaybook,
+    cryptoNotes: state.cryptoNotes,
+    panelOrder: state.panelOrder,
   }),
   accounts: () => state.accounts || [],
   weight:   () => state.weight || {current:null, history:[]},
@@ -3510,9 +2999,17 @@ async function init(){
     b.classList.toggle('active', b.dataset.cur === state.currency);
   });
 
-  // Restore active view (never auto-open private view — always require passcode)
+  // Restore active view
   const savedView = state.activeView || 'dashboard';
-  switchView(savedView === 'private' ? 'dashboard' : savedView);
+  switchView((savedView === 'private' || savedView === 'growth') ? 'dashboard' : savedView);
+
+  // Render manifesto phrases (default if not saved)
+  const phrasesEl = document.getElementById('manifesto-phrases');
+  if(phrasesEl && !phrasesEl.innerHTML.trim()){
+    const defaultText = 'Take life seriously.\nUnbothered, happy in my *own lane*.\nPush yourself.\nIt\'s cringe until *you win*.\nConsistency.';
+    phrasesEl.innerHTML = manifestoTextToHtml(defaultText);
+    state.manifesto = phrasesEl.innerHTML;
+  }
 
   // FX rate: fetch if never fetched or >6h old
   const sixHours = 6 * 60 * 60 * 1000;
@@ -3569,8 +3066,13 @@ async function loadFromLocal(){
     if(focus) state.focus = focus;
     if(shadow) state.shadow = shadow;
     if(state.manifesto){
-      const el = document.getElementById('manifesto-quote');
+      const el = document.getElementById('manifesto-phrases');
       if(el) el.innerHTML = state.manifesto;
+    }
+    // Load crypto notes
+    if(state.cryptoNotes){
+      const cn = document.getElementById('crypto-notes');
+      if(cn) cn.value = state.cryptoNotes;
     }
   } else {
     // First-time user: seed defaults
@@ -3631,8 +3133,12 @@ async function cloudSyncPull(){
 
   // Re-render with merged state
   if(state.manifesto){
-    const el = document.getElementById('manifesto-quote');
+    const el = document.getElementById('manifesto-phrases');
     if(el) el.innerHTML = state.manifesto;
+  }
+  if(state.cryptoNotes){
+    const cn = document.getElementById('crypto-notes');
+    if(cn) cn.value = state.cryptoNotes;
   }
   renderAll();
   return true;
@@ -3775,7 +3281,11 @@ function updateClock(){
   const start = new Date(d.getFullYear(), 0, 0);
   const diff = d - start;
   const dayOfYear = Math.floor(diff / (1000*60*60*24));
-  document.getElementById('stat-day').textContent = dayOfYear;
+  const isLeap = (d.getFullYear() % 4 === 0 && d.getFullYear() % 100 !== 0) || d.getFullYear() % 400 === 0;
+  const totalDays = isLeap ? 366 : 365;
+  const daysLeft = totalDays - dayOfYear;
+  const ratioEl = document.getElementById('stat-day-ratio');
+  if(ratioEl) ratioEl.textContent = dayOfYear + '/' + daysLeft;
 
   // Compute exact age: years + days since last birthday
   let years = d.getFullYear() - BIRTHDAY.getFullYear();
@@ -3787,6 +3297,21 @@ function updateClock(){
   const daysSinceBirthday = Math.floor((d - lastBirthday) / (1000*60*60*24));
   const ageEl = document.getElementById('stat-age');
   if(ageEl) ageEl.innerHTML = `${years}<span style="font-size:0.6em;color:var(--ink-dim);font-style:normal;margin:0 4px">·</span>${daysSinceBirthday}`;
+
+  // Global streak: consecutive days with at least 1 habit done
+  const streakEl = document.getElementById('stat-streak');
+  if(streakEl && state.habits && state.habits.length > 0){
+    let streak = 0;
+    for(let i = 0; i < 365; i++){
+      const check = new Date(d);
+      check.setDate(d.getDate() - i);
+      const key = check.toISOString().slice(0,10);
+      const anyDone = state.habits.some(h => h.days && h.days[key]);
+      if(anyDone) streak++;
+      else break;
+    }
+    streakEl.textContent = streak;
+  }
 }
 
 // ==================== VIEW SWITCHING ====================
@@ -3794,26 +3319,14 @@ function switchView(viewName){
   document.querySelectorAll('.view-tab').forEach(b => b.classList.toggle('active', b.dataset.view === viewName));
   document.getElementById('view-dashboard').style.display = viewName === 'dashboard' ? '' : 'none';
   document.getElementById('view-finance').style.display = viewName === 'finance' ? '' : 'none';
-  document.getElementById('view-growth').style.display = viewName === 'growth' ? '' : 'none';
-  document.getElementById('view-private').style.display = viewName === 'private' ? '' : 'none';
+  document.getElementById('view-sante').style.display = viewName === 'sante' ? '' : 'none';
   state.activeView = viewName;
   save('core');
   if(viewName === 'finance'){
-    setTimeout(() => { renderNwChart(); renderPlaybook(); }, 20);
+    setTimeout(() => { renderNwChart(); }, 20);
   }
-  if(viewName === 'growth'){
-    setTimeout(() => { renderYearDots(); renderReflection(); renderGrowthAnalytics(); }, 20);
-  }
-  if(viewName === 'private'){
-    // Always lock when entering - no persistent unlock across sessions
-    lockPrivateView();
-    setTimeout(() => {
-      const input = document.getElementById('private-gate-input');
-      if(input) input.focus();
-    }, 50);
-  } else {
-    // Lock when leaving private view
-    lockPrivateView();
+  if(viewName === 'sante'){
+    setTimeout(() => { renderShadow(); renderTraining(); renderWeight(); }, 20);
   }
 }
 
@@ -3826,27 +3339,22 @@ document.querySelectorAll('.view-tab').forEach(b => {
 function manifestoTextToHtml(text){
   const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
   if(lines.length === 0) return '';
-  const renderedLines = lines.map(line => {
-    // Escape HTML first
+  return lines.map(line => {
     let html = String(line).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    // Then apply *word* → <em>word</em>
     html = html.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
-    return html;
-  });
-  return renderedLines.join('<span class="sep">/</span>');
+    return `<span class="manifesto-phrase">${html}</span>`;
+  }).join('');
 }
 
 // Convert HTML manifesto back to plain text for editing
 function manifestoHtmlToText(html){
   if(!html) return '';
   let text = String(html);
-  // Convert <em>x</em> back to *x*
   text = text.replace(/<em>(.*?)<\/em>/gi, '*$1*');
-  // Split on separator spans
+  // Split on phrase spans or old separator spans
+  text = text.replace(/<\/span>\s*<span class="manifesto-phrase">/g, '\n');
   text = text.replace(/<span class="sep">\/<\/span>/g, '\n');
-  // Remove any other HTML
   text = text.replace(/<[^>]+>/g, '');
-  // Decode entities
   const txt = document.createElement('textarea');
   txt.innerHTML = text;
   return txt.value.split('\n').map(l => l.trim()).filter(l => l.length > 0).join('\n');
@@ -3855,7 +3363,7 @@ function manifestoHtmlToText(html){
 function openManifestoModal(){
   const modal = document.getElementById('modal-manifesto');
   const input = document.getElementById('manifesto-input');
-  const currentHtml = document.getElementById('manifesto-quote').innerHTML;
+  const currentHtml = document.getElementById('manifesto-phrases').innerHTML;
   input.value = manifestoHtmlToText(currentHtml);
   updateManifestoPreview();
   modal.classList.add('active');
@@ -3876,13 +3384,13 @@ function updateManifestoPreview(){
 function saveManifestoFromModal(){
   const input = document.getElementById('manifesto-input');
   const html = manifestoTextToHtml(input.value);
-  const quote = document.getElementById('manifesto-quote');
+  const quote = document.getElementById('manifesto-phrases');
   if(html){
     quote.innerHTML = html;
     state.manifesto = html;
   } else {
     // Empty → reset to default
-    const fallback = 'Take life seriously.<span class="sep">/</span>Unbothered, happy in my <em>own lane</em>.<span class="sep">/</span>Push yourself.<span class="sep">/</span>It\'s cringe until <em>you win</em>.<span class="sep">/</span>Consistency.';
+    const fallback = manifestoTextToHtml('Take life seriously.\nUnbothered, happy in my *own lane*.\nPush yourself.\nIt\'s cringe until *you win*.\nConsistency.');
     quote.innerHTML = fallback;
     state.manifesto = fallback;
   }
@@ -3905,6 +3413,17 @@ document.getElementById('manifesto-input').addEventListener('keydown', e => {
 document.getElementById('modal-manifesto').addEventListener('click', e => {
   if(e.target.id === 'modal-manifesto') closeManifestoModal();
 });
+
+// ==================== CRYPTO NOTES ====================
+(function wireCryptoNotes(){
+  const el = document.getElementById('crypto-notes');
+  if(el){
+    el.addEventListener('input', () => {
+      state.cryptoNotes = el.value;
+      save('core');
+    });
+  }
+})();
 
 // ==================== NET WORTH ====================
 function renderNetWorth(){
@@ -4094,13 +3613,7 @@ function renderNwChart(){
   const history = state.nwHistory || [];
   
   // Filter by range
-  const range = state.chartRange || '30';
   let filtered = history.slice();
-  if(range !== 'all'){
-    const days = parseInt(range);
-    const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
-    filtered = history.filter(h => new Date(h.date).getTime() >= cutoff);
-  }
   // Sort chronologically
   filtered.sort((a,b) => new Date(a.date) - new Date(b.date));
 
@@ -4239,56 +3752,12 @@ document.querySelectorAll('#nw-range button').forEach(b => {
   });
 });
 
-// ==================== READING ====================
-function renderReading(){
-  document.getElementById('book-title').value = state.book.title || '';
-  document.getElementById('book-author').value = state.book.author || '';
-  document.getElementById('book-current-page').value = state.book.current || '';
-  document.getElementById('book-total-pages').value = state.book.total || '';
-  const pct = state.book.total ? Math.min(100, Math.round(state.book.current/state.book.total*100)) : 0;
-  document.getElementById('book-percent').textContent = pct + '%';
-  document.getElementById('book-bar-fill').style.width = pct + '%';
-  document.getElementById('books-ytd').textContent = state.booksYtd || 0;
-  document.getElementById('books-goal').value = state.booksGoal || 24;
-  document.getElementById('finish-book').disabled = !state.book.title;
-
-  const cover = document.getElementById('book-cover');
-  const coverText = document.getElementById('book-cover-text');
-  if(state.book.title){
-    coverText.textContent = state.book.title;
-    const hash = hashStr(state.book.title);
-    const palettes = [
-      ['#1554ff','#fff'],['#0a1733','#fff'],['#18b26b','#fff'],
-      ['#e5383b','#fff'],['#f5a623','#0a1733'],['#6b4a8a','#fff']
-    ];
-    const p = palettes[hash % palettes.length];
-    cover.style.background = p[0];
-    coverText.style.color = p[1];
-  } else {
-    coverText.textContent = 'No book';
-    cover.style.background = 'var(--surface-2)';
-    coverText.style.color = 'var(--ink-faint)';
-  }
-}
-
+// ==================== READING (removed — kept function stub) ====================
+function renderReading(){}
 function hashStr(s){ let h=0; for(let c of s) h = (h<<5)-h+c.charCodeAt(0)|0; return Math.abs(h); }
 
-document.getElementById('book-title').addEventListener('input', e => { state.book.title = e.target.value; save(); renderReading(); });
-document.getElementById('book-author').addEventListener('input', e => { state.book.author = e.target.value; save(); });
-document.getElementById('book-current-page').addEventListener('input', e => { state.book.current = parseInt(e.target.value)||0; save(); renderReading(); });
-document.getElementById('book-total-pages').addEventListener('input', e => { state.book.total = parseInt(e.target.value)||0; save(); renderReading(); });
-document.getElementById('books-goal').addEventListener('input', e => { state.booksGoal = parseInt(e.target.value)||24; save(); });
-
-document.getElementById('finish-book').addEventListener('click', () => {
-  if(!state.book.title){ return; }
-  if(!confirm(`Mark "${state.book.title}" as finished?`)) return;
-  state.booksYtd = (state.booksYtd||0) + 1;
-  state.book = { title:'', author:'', current:0, total:0 };
-  save(); renderReading();
-});
-
 // ==================== HABITS ====================
-let habitsTab = 'beta';
+let habitsTab = 'perm';
 function renderHabits(){
   const todayList = document.getElementById('habits-today-list');
   const historyEl = document.getElementById('habits-history');
@@ -4526,17 +3995,22 @@ function renderTodos(){
 
     const isProtected = proj.id === 'inbox';
     const delBtn = isProtected ? '' : `<button class="list-del" data-del-list="${proj.id}" title="Delete list">×</button>`;
+    const isEmpty = items.length === 0;
+    const isCollapsed = isEmpty && !(state._expandedLists || {})[proj.id];
 
     card.innerHTML = `
       <div class="list-header">
         <span class="list-dot" style="background:${proj.color}" data-color-dot="${proj.id}" title="Change color"></span>
         <input class="list-name-input" value="${escapeHtml(proj.name)}" data-rename="${proj.id}" ${isProtected ? 'title="Inbox cannot be renamed" readonly' : 'title="Click to rename"'}>
         <span class="list-count">${openCount}</span>
+        ${isEmpty ? `<button class="btn-icon" data-expand-list="${proj.id}" title="${isCollapsed ? 'Expand' : 'Collapse'}" style="font-size:12px;opacity:1">${isCollapsed ? '+' : '−'}</button>` : ''}
         ${delBtn}
       </div>
-      <div class="list-items" data-list-items="${proj.id}"></div>
-      <div class="list-add">
-        <input type="text" placeholder="+ Add task…" data-new-task="${proj.id}">
+      <div class="list-body" style="${isCollapsed ? 'display:none' : ''}">
+        <div class="list-items" data-list-items="${proj.id}"></div>
+        <div class="list-add">
+          <input type="text" placeholder="+ Add task…" data-new-task="${proj.id}">
+        </div>
       </div>
     `;
 
@@ -4544,8 +4018,8 @@ function renderTodos(){
 
     // Populate items
     const itemsWrap = card.querySelector(`[data-list-items="${proj.id}"]`);
-    if(items.length === 0){
-      itemsWrap.innerHTML = `<div class="list-empty">No tasks yet</div>`;
+    if(isEmpty){
+      itemsWrap.innerHTML = '';
     } else {
       items.forEach(t => {
         const row = document.createElement('div');
@@ -4560,12 +4034,15 @@ function renderTodos(){
     }
   });
 
-  // Add "new list" card at the end
-  const addCard = document.createElement('div');
-  addCard.className = 'add-list-card';
-  addCard.innerHTML = '+ New list';
-  addCard.addEventListener('click', openProjectModal);
-  grid.appendChild(addCard);
+  // Wire expand/collapse for empty lists
+  grid.querySelectorAll('[data-expand-list]').forEach(b => {
+    b.addEventListener('click', () => {
+      state._expandedLists = state._expandedLists || {};
+      const id = b.dataset.expandList;
+      state._expandedLists[id] = !state._expandedLists[id];
+      renderTodos();
+    });
+  });
 
   // Wire up interactions
   grid.querySelectorAll('[data-check]').forEach(b => {
@@ -4871,7 +4348,8 @@ function renderCockpitGym(){
 }
 
 // Toggle
-document.getElementById('cockpit-toggle').addEventListener('click', () => {
+const _cockpitToggle = document.getElementById('cockpit-toggle');
+if(_cockpitToggle) _cockpitToggle.addEventListener('click', () => {
   ensureCockpitState();
   state.cockpit.collapsed = !state.cockpit.collapsed;
   save('cockpit');
@@ -5089,7 +4567,8 @@ function openFocusModal(){
   document.getElementById('modal-focus').classList.add('active');
 }
 
-document.getElementById('cockpit-focus-btn').addEventListener('click', openFocusModal);
+const _cockpitFocus = document.getElementById('cockpit-focus-btn');
+if(_cockpitFocus) _cockpitFocus.addEventListener('click', openFocusModal);
 document.getElementById('focus-close').addEventListener('click', () => {
   document.getElementById('modal-focus').classList.remove('active');
 });
@@ -5427,10 +4906,7 @@ function getDayStatus(dateKey){
 
 function renderShadow(){
   ensureShadowState();
-  if(!document.getElementById('shadow-manifesto-text')) return;
-
-  // Manifesto
-  document.getElementById('shadow-manifesto-text').innerHTML = shadowManifestoHtml(state.shadow.manifesto);
+  if(!document.getElementById('shadow-counter-num')) return;
 
   // Counter
   const daysSince = daysSinceLastSlip();
@@ -5475,21 +4951,16 @@ function renderShadow(){
     const cell = document.createElement('div');
     cell.className = `shadow-day ${status}${isToday ? ' today' : ''}`;
     const dateStr = d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
-    cell.title = `${dateStr} · ${status === 'slip' ? 'slip' : status === 'clean' ? 'clean' : 'not tracked'}`;
+    cell.title = `${dateStr} · ${status === 'slip' ? 'slip' : status === 'clean' ? 'clean' : 'not tracked'} · click to toggle`;
+    cell.style.cursor = 'pointer';
+    const cellKey = key;
+    cell.addEventListener('click', () => toggleShadowDay(cellKey));
     timeline.appendChild(cell);
     if(status === 'clean') cleanCount++;
     if(status === 'slip') slipCount++;
   });
 
-  // Stats
-  const stats = document.getElementById('shadow-stats');
-  const cleanPct = Math.round((cleanCount / 30) * 100);
-  const bestStreak = computeShadowCleanStreak();
-  stats.innerHTML = `
-    <div class="shadow-stat"><div class="shadow-stat-v">${cleanCount}</div><div class="shadow-stat-k">Clean days</div></div>
-    <div class="shadow-stat"><div class="shadow-stat-v">${slipCount}</div><div class="shadow-stat-k">Slips this month</div></div>
-    <div class="shadow-stat"><div class="shadow-stat-v">${bestStreak}</div><div class="shadow-stat-k">Best streak (days)</div></div>
-  `;
+  // Stats removed — timeline is enough
 }
 
 function computeShadowCleanStreak(){
@@ -5550,20 +5021,35 @@ function saveSlipToday(){
   document.getElementById('modal-shadow-slip').classList.remove('active');
 }
 
+// Retrocompletion: cycle untracked → clean → slip → untracked
+function toggleShadowDay(dateKey){
+  ensureShadowState();
+  const status = getDayStatus(dateKey);
+  if(status === 'untracked'){
+    // Mark clean
+    state.shadow.cleanDays = state.shadow.cleanDays || {};
+    state.shadow.cleanDays[dateKey] = Date.now();
+  } else if(status === 'clean'){
+    // Mark slip
+    delete state.shadow.cleanDays[dateKey];
+    state.shadow.occurrences.push({ date: dateKey, note: '', createdAt: Date.now() });
+  } else {
+    // Remove slip → back to untracked
+    state.shadow.occurrences = state.shadow.occurrences.filter(o => o.date !== dateKey);
+    if(state.shadow.cleanDays) delete state.shadow.cleanDays[dateKey];
+  }
+  save('shadow');
+  renderShadow();
+}
+
 // Wire shadow events (guarded)
 (function wireShadow(){
   const cleanBtn = document.getElementById('shadow-btn-clean');
   const slipBtn = document.getElementById('shadow-btn-slip');
-  const lockBtn = document.getElementById('shadow-lock-btn');
   const editBtn = document.getElementById('shadow-manifesto-edit');
 
   if(cleanBtn) cleanBtn.addEventListener('click', markCleanToday);
   if(slipBtn) slipBtn.addEventListener('click', openSlipModal);
-  if(lockBtn) lockBtn.addEventListener('click', () => {
-    lockPrivateView();
-    // Also switch back to dashboard for full safety
-    switchView('dashboard');
-  });
 
   // Manifesto edit
   if(editBtn) editBtn.addEventListener('click', () => {
@@ -6052,7 +5538,8 @@ function setPlaybookCollapsed(collapsed){
   save('core');
 }
 
-document.getElementById('playbook-toggle').addEventListener('click', () => {
+const _pbToggle = document.getElementById('playbook-toggle');
+if(_pbToggle) _pbToggle.addEventListener('click', () => {
   const card = document.getElementById('playbook-card');
   const isCollapsed = card.classList.contains('collapsed');
   // Before collapsing, lock current height to enable smooth transition
@@ -6449,6 +5936,7 @@ function formatWeekLabel(weekKey){
 }
 
 function renderReflection(){
+  if(!document.getElementById('reflection-week')) return;
   const weekKey = getWeekStartKey(new Date());
   document.getElementById('reflection-week').textContent = formatWeekLabel(weekKey);
   const current = (state.reflections && state.reflections[weekKey]) || { worked:'', didnt:'', next:'' };
@@ -6469,12 +5957,16 @@ function saveReflectionField(field, value){
   clearTimeout(reflectionDebounce);
   reflectionDebounce = setTimeout(() => save('reflections'), 600);
 }
-document.getElementById('refl-worked').addEventListener('input', e => saveReflectionField('worked', e.target.value));
-document.getElementById('refl-didnt').addEventListener('input', e => saveReflectionField('didnt', e.target.value));
-document.getElementById('refl-next').addEventListener('input', e => saveReflectionField('next', e.target.value));
+const _reflW = document.getElementById('refl-worked');
+const _reflD = document.getElementById('refl-didnt');
+const _reflN = document.getElementById('refl-next');
+if(_reflW) _reflW.addEventListener('input', e => saveReflectionField('worked', e.target.value));
+if(_reflD) _reflD.addEventListener('input', e => saveReflectionField('didnt', e.target.value));
+if(_reflN) _reflN.addEventListener('input', e => saveReflectionField('next', e.target.value));
 
 // Archive modal
-document.getElementById('refl-archive').addEventListener('click', () => {
+const _reflArchive = document.getElementById('refl-archive');
+if(_reflArchive) _reflArchive.addEventListener('click', () => {
   const list = document.getElementById('reflection-list');
   list.innerHTML = '';
   const currentWeekKey = getWeekStartKey(new Date());
@@ -6504,29 +5996,119 @@ document.getElementById('refl-archive').addEventListener('click', () => {
   }
   document.getElementById('modal-archive').classList.add('active');
 });
-document.getElementById('modal-archive').addEventListener('click', e => {
+const _modalArchive = document.getElementById('modal-archive');
+if(_modalArchive) _modalArchive.addEventListener('click', e => {
   if(e.target.id === 'modal-archive') e.target.classList.remove('active');
 });
 
 // ==================== UTILS ====================
 function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
+// ==================== PANEL REORDER ====================
+function initPanelReorder(){
+  const grid = document.querySelector('#view-dashboard .grid');
+  if(!grid) return;
+  const panels = grid.querySelectorAll('[data-panel]');
+
+  // Restore saved order
+  const savedOrder = state.panelOrder || [];
+  if(savedOrder.length > 0){
+    savedOrder.forEach(id => {
+      const el = grid.querySelector(`[data-panel="${id}"]`);
+      if(el) grid.appendChild(el);
+    });
+  }
+
+  // Inject arrow buttons
+  panels.forEach(panel => {
+    const label = panel.querySelector('.label');
+    if(!label || label.querySelector('.panel-arrows')) return;
+    const arrows = document.createElement('div');
+    arrows.className = 'panel-arrows';
+    arrows.innerHTML = `<button class="panel-arrow" data-dir="up" title="Move up">&#9650;</button><button class="panel-arrow" data-dir="down" title="Move down">&#9660;</button>`;
+    label.appendChild(arrows);
+
+    arrows.querySelectorAll('.panel-arrow').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        movePanelInGrid(grid, panel, btn.dataset.dir);
+      });
+    });
+  });
+}
+
+function movePanelInGrid(grid, panel, dir){
+  const panels = [...grid.querySelectorAll('[data-panel]')];
+  const idx = panels.indexOf(panel);
+  if(dir === 'up' && idx > 0){
+    grid.insertBefore(panel, panels[idx - 1]);
+  } else if(dir === 'down' && idx < panels.length - 1){
+    panels[idx + 1].after(panel);
+  }
+  // Save order
+  const newOrder = [...grid.querySelectorAll('[data-panel]')].map(p => p.dataset.panel);
+  state.panelOrder = newOrder;
+  save('core');
+}
+
+// ==================== HEATMAP ====================
+function renderHeatmap(){
+  const grid = document.getElementById('heatmap');
+  if(!grid) return;
+  grid.innerHTML = '';
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const todayKey = now.toISOString().slice(0, 10);
+  const monthName = now.toLocaleDateString('fr-FR', {month:'long'});
+
+  document.getElementById('heatmap-year').textContent = monthName + ' ' + year;
+  grid.style.gridTemplateColumns = `repeat(${daysInMonth}, 1fr)`;
+
+  // Build activity map for this month
+  const activityMap = {};
+  (state.habits || []).forEach(h => {
+    if(!h.days) return;
+    Object.keys(h.days).forEach(key => {
+      activityMap[key] = (activityMap[key] || 0) + 1;
+    });
+  });
+
+  const totalHabits = (state.habits || []).length || 1;
+  let activeDays = 0;
+
+  for(let d = 1; d <= daysInMonth; d++){
+    const date = new Date(year, month, d);
+    const key = date.toISOString().slice(0, 10);
+    const count = activityMap[key] || 0;
+    const isFuture = date > now;
+    const isToday = key === todayKey;
+
+    const cell = document.createElement('div');
+    const pct = count / totalHabits;
+    const level = count === 0 ? '' : pct <= 0.25 ? ' l1' : pct <= 0.5 ? ' l2' : pct <= 0.75 ? ' l3' : ' l4';
+    cell.className = 'heatmap-cell' + level + (isFuture ? ' future' : '') + (isToday ? ' today' : '');
+    cell.title = `${d} · ${count} habit${count !== 1 ? 's' : ''}`;
+    if(count > 0 && !isFuture) activeDays++;
+
+    grid.appendChild(cell);
+  }
+  document.getElementById('heatmap-active').textContent = activeDays;
+}
+
 function renderAll(){
   renderNetWorth();
   renderNwChart();
   renderWeight();
-  renderReading();
   renderHabits();
+  renderHeatmap();
   renderTodos();
-  renderYearDots();
-  renderReflection();
-  renderGrowthAnalytics();
-  renderPlaybook();
   renderTraining();
-  renderCockpit();
+  renderShadow();
 }
 
-init();
+init().then(() => initPanelReorder());
 </script>
 
 </body>
