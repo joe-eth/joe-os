@@ -3987,7 +3987,14 @@ function renderTodos(){
   const grid = document.getElementById('lists-grid');
   grid.innerHTML = '';
 
-  state.projects.forEach(proj => {
+  // Sort projects: most tasks first (open count descending)
+  const sortedProjects = [...state.projects].sort((a, b) => {
+    const aCount = state.todos.filter(t => t.project === a.id && !t.done).length;
+    const bCount = state.todos.filter(t => t.project === b.id && !t.done).length;
+    return bCount - aCount;
+  });
+
+  sortedProjects.forEach(proj => {
     const card = document.createElement('div');
     card.className = 'list-card';
     card.dataset.listId = proj.id;
@@ -3998,22 +4005,17 @@ function renderTodos(){
 
     const isProtected = proj.id === 'inbox';
     const delBtn = isProtected ? '' : `<button class="list-del" data-del-list="${proj.id}" title="Delete list">×</button>`;
-    const isEmpty = items.length === 0;
-    const isCollapsed = isEmpty && !(state._expandedLists || {})[proj.id];
 
     card.innerHTML = `
       <div class="list-header">
         <span class="list-dot" style="background:${proj.color}" data-color-dot="${proj.id}" title="Change color"></span>
         <input class="list-name-input" value="${escapeHtml(proj.name)}" data-rename="${proj.id}" ${isProtected ? 'title="Inbox cannot be renamed" readonly' : 'title="Click to rename"'}>
         <span class="list-count">${openCount}</span>
-        ${isEmpty ? `<button class="btn-icon" data-expand-list="${proj.id}" title="${isCollapsed ? 'Expand' : 'Collapse'}" style="font-size:12px;opacity:1">${isCollapsed ? '+' : '−'}</button>` : ''}
         ${delBtn}
       </div>
-      <div class="list-body" style="${isCollapsed ? 'display:none' : ''}">
-        <div class="list-items" data-list-items="${proj.id}"></div>
-        <div class="list-add">
-          <input type="text" placeholder="+ Add task…" data-new-task="${proj.id}">
-        </div>
+      <div class="list-items" data-list-items="${proj.id}"></div>
+      <div class="list-add">
+        <input type="text" placeholder="+ Add task…" data-new-task="${proj.id}">
       </div>
     `;
 
@@ -4021,7 +4023,7 @@ function renderTodos(){
 
     // Populate items
     const itemsWrap = card.querySelector(`[data-list-items="${proj.id}"]`);
-    if(isEmpty){
+    if(items.length === 0){
       itemsWrap.innerHTML = '';
     } else {
       items.forEach(t => {
@@ -4035,16 +4037,6 @@ function renderTodos(){
         itemsWrap.appendChild(row);
       });
     }
-  });
-
-  // Wire expand/collapse for empty lists
-  grid.querySelectorAll('[data-expand-list]').forEach(b => {
-    b.addEventListener('click', () => {
-      state._expandedLists = state._expandedLists || {};
-      const id = b.dataset.expandList;
-      state._expandedLists[id] = !state._expandedLists[id];
-      renderTodos();
-    });
   });
 
   // Wire up interactions
