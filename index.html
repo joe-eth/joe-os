@@ -1506,6 +1506,43 @@
   /* ==================== TRAINING (program playbook) ==================== */
   .training{position:relative}
 
+  /* Today's training check (Tue/Thu/Sat only) */
+  .training-today-check{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:12px 16px;margin-bottom:12px;
+    background:var(--blue-soft);border:1px solid rgba(21,84,255,0.18);
+    border-radius:12px;
+  }
+  .training-today-info{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .training-today-day{
+    font-size:14px;font-weight:800;letter-spacing:-0.02em;color:var(--blue);
+  }
+  .training-today-sub{
+    font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;
+    color:var(--ink-dim);letter-spacing:0.1em;text-transform:uppercase;
+  }
+  .training-today-btn{
+    display:inline-flex;align-items:center;gap:10px;flex-shrink:0;
+    padding:8px 14px;border-radius:999px;cursor:pointer;
+    background:#fff;border:1.5px solid rgba(21,84,255,0.25);
+    font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;letter-spacing:-0.01em;
+    color:var(--ink);transition:all 0.15s ease;
+  }
+  .training-today-btn:hover{border-color:var(--blue);box-shadow:0 4px 14px -4px var(--blue-glow)}
+  .training-today-box{
+    width:18px;height:18px;border-radius:6px;flex-shrink:0;
+    background:#fff;border:1.5px solid var(--ink-faint);
+    display:inline-flex;align-items:center;justify-content:center;
+    transition:all 0.15s ease;
+  }
+  .training-today-btn.checked{background:var(--blue);border-color:var(--blue);color:#fff}
+  .training-today-btn.checked .training-today-box{
+    background:#fff;border-color:#fff;
+  }
+  .training-today-btn.checked .training-today-box::after{
+    content:'';width:9px;height:9px;border-radius:2px;background:var(--blue);
+  }
+
   /* Program header */
   .training-program-header{
     padding:16px 20px;margin-bottom:16px;
@@ -2187,6 +2224,10 @@
         </button>
       </div>
       <button class="pill-btn cloud-status cloud-offline" id="cloud-status" title="Cloud sync status · click for options">Offline</button>
+      <button class="pill-btn" id="export-brief-btn" title="Exporter un brief (.md) à coller dans un chatbot mentor">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="margin-right:2px"><path d="M6.5 1v8M3 6l3.5 3.5L10 6M2 11.5h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Brief
+      </button>
       <button class="pill-btn"><span class="status-dot"></span><span id="hdr-date">—</span></button>
       <button class="pill-btn dark"><span id="hdr-day">—</span> · <span id="hdr-time">—</span></button>
       <button class="pill-btn"><em id="stat-age" style="font-style:normal;color:var(--blue);font-weight:800">—</em> <span style="color:var(--ink-faint);margin:0 4px">·</span> <span style="font-size:10px;color:var(--ink-dim)">age</span></button>
@@ -2370,10 +2411,19 @@
   <div class="view view-sante" id="view-sante" style="display:none">
     <div class="grid">
 
-    <!-- S1 WEIGHT -->
+    <!-- S1 THE SHADOW (addiction tracker) -->
+    <div class="card shadow-card span-12">
+      <div class="label">
+        <span class="label-text">S1 · The Shadow</span>
+        <span class="label-tag"><span id="shadow-counter-num" style="font-weight:800">—</span> <span id="shadow-counter-unit">days clean</span></span>
+      </div>
+      <div class="shadow-timeline" id="shadow-timeline"></div>
+    </div>
+
+    <!-- S2 WEIGHT -->
     <div class="card span-6">
       <div class="label">
-        <span class="label-text">S1 · Weight</span>
+        <span class="label-text">S2 · Weight</span>
         <span class="label-tag" id="weight-date">Today</span>
       </div>
       <div class="mini-body">
@@ -2398,10 +2448,10 @@
       </div>
     </div>
 
-    <!-- S2 TRAINING -->
+    <!-- S3 TRAINING -->
     <div class="card training span-6" id="training-card">
       <div class="label">
-        <span class="label-text">S2 · Training</span>
+        <span class="label-text">S3 · Training</span>
         <div style="display:flex;align-items:center;gap:12px">
           <span class="label-tag"><span class="dot" style="background:var(--blue)"></span> My routine</span>
           <button class="pill-btn" id="training-edit-btn" style="height:32px;padding:0 14px;font-size:11px">
@@ -2409,6 +2459,16 @@
             Edit
           </button>
         </div>
+      </div>
+      <div class="training-today-check" id="training-today-check" style="display:none">
+        <div class="training-today-info">
+          <div class="training-today-day" id="training-today-day">—</div>
+          <div class="training-today-sub">jour d'entraînement</div>
+        </div>
+        <button class="training-today-btn" id="training-today-btn" type="button">
+          <span class="training-today-box" id="training-today-box"></span>
+          <span class="training-today-text" id="training-today-text">J'ai été m'entraîner</span>
+        </button>
       </div>
       <div class="training-program-header" id="training-program-header">
         <div class="training-program-name" id="training-program-name">Current program</div>
@@ -2420,15 +2480,6 @@
         <div class="training-empty-title">No program set up yet</div>
         <button class="pill-btn blue" id="training-setup-btn" style="margin-top:14px">Set up my program</button>
       </div>
-    </div>
-
-    <!-- S3 THE SHADOW (addiction tracker) -->
-    <div class="card shadow-card span-12">
-      <div class="label">
-        <span class="label-text">S3 · The Shadow</span>
-        <span class="label-tag"><span id="shadow-counter-num" style="font-weight:800">—</span> <span id="shadow-counter-unit">days clean</span></span>
-      </div>
-      <div class="shadow-timeline" id="shadow-timeline"></div>
     </div>
 
     </div>
@@ -5076,7 +5127,49 @@ function ensureTrainingState(){
   state.training.block = state.training.block || { name:'Current program', notes:'' };
   state.training.days = state.training.days || [];
   state.training.activeDay = state.training.activeDay || null;
+  state.training.trained = state.training.trained || {}; // { 'YYYY-MM-DD': timestamp }
 }
+
+// Tue=2, Thu=4, Sat=6
+const TRAINING_WEEKDAYS = { 2:'Mardi', 4:'Jeudi', 6:'Samedi' };
+
+function renderTrainedToday(){
+  ensureTrainingState();
+  const wrap = document.getElementById('training-today-check');
+  if(!wrap) return;
+  const dayIdx = new Date().getDay();
+  const dayName = TRAINING_WEEKDAYS[dayIdx];
+  if(!dayName){
+    wrap.style.display = 'none';
+    return;
+  }
+  wrap.style.display = '';
+  const dayEl = document.getElementById('training-today-day');
+  if(dayEl) dayEl.textContent = dayName;
+  const todayKey = todayDateKey();
+  const isChecked = !!state.training.trained[todayKey];
+  const btn = document.getElementById('training-today-btn');
+  const txt = document.getElementById('training-today-text');
+  if(btn) btn.classList.toggle('checked', isChecked);
+  if(txt) txt.textContent = isChecked ? 'Entraînement validé' : "J'ai été m'entraîner";
+}
+
+function toggleTrainedToday(){
+  ensureTrainingState();
+  const todayKey = todayDateKey();
+  if(state.training.trained[todayKey]){
+    delete state.training.trained[todayKey];
+  } else {
+    state.training.trained[todayKey] = Date.now();
+  }
+  save('training');
+  renderTrainedToday();
+}
+
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('#training-today-btn');
+  if(btn) toggleTrainedToday();
+});
 
 // Presets for quick setup
 const TRAINING_PRESETS = {
@@ -5213,6 +5306,7 @@ const TRAINING_PRESETS = {
 
 function renderTraining(){
   ensureTrainingState();
+  renderTrainedToday();
   const t = state.training;
   const card = document.getElementById('training-card');
   if(!card) return;
@@ -6081,6 +6175,251 @@ function renderHeatmap(){
   }
   document.getElementById('heatmap-active').textContent = activeDays;
 }
+
+// ==================== MENTOR BRIEF EXPORT ====================
+// Builds a markdown journal of all dashboard inputs and downloads it locally.
+// Reads runtime state only — nothing is sent to GitHub or any server.
+
+function fmtDateFr(date){
+  const d = (typeof date === 'string' || typeof date === 'number') ? new Date(date) : date;
+  if(!d || isNaN(d.getTime())) return String(date);
+  return d.toLocaleDateString('fr-FR', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+}
+
+function fmtTimeFr(ts){
+  if(!ts) return null;
+  const d = new Date(ts);
+  if(isNaN(d.getTime())) return null;
+  return d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+}
+
+function dateKeyOf(input){
+  const d = new Date(input);
+  if(isNaN(d.getTime())) return String(input);
+  return d.toISOString().slice(0,10);
+}
+
+function streakUpTo(habit, dateKey){
+  // Consecutive done days ending at dateKey (inclusive)
+  const days = habit.days || {};
+  const start = new Date(dateKey + 'T12:00:00');
+  if(isNaN(start.getTime())) return 0;
+  let streak = 0;
+  for(let i=0;i<365;i++){
+    const d = new Date(start); d.setDate(start.getDate() - i);
+    const key = d.toISOString().slice(0,10);
+    if(days[key]) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function generateMentorBrief(){
+  const now = new Date();
+  const lines = [];
+
+  lines.push(`# Joe OS — Brief mentor`);
+  lines.push(`Généré le ${fmtDateFr(now)} à ${fmtTimeFr(now.getTime())}`);
+  lines.push('');
+  lines.push(`> Export local du dashboard Joe OS, à coller dans un chatbot mentor pour discuter du suivi.`);
+  lines.push('');
+
+  // 1. Manifesto
+  lines.push(`## Mon manifesto`);
+  const manifestoText = state.manifesto ? manifestoHtmlToText(state.manifesto) : '';
+  if(manifestoText){
+    manifestoText.split('\n').filter(l => l.trim()).forEach(l => lines.push(`- ${l.trim()}`));
+  } else {
+    lines.push(`_(non défini)_`);
+  }
+  lines.push('');
+
+  // 2. État actuel
+  lines.push(`## État actuel`);
+  const wHist = (state.weight && state.weight.history) || [];
+  const weightLast = wHist[wHist.length-1];
+  if(weightLast){
+    lines.push(`- **Poids** : ${weightLast.v} kg (dernière saisie : ${fmtDateFr(weightLast.date)})`);
+  }
+  const lastSnap = (state.nwHistory || [])[ (state.nwHistory || []).length - 1 ];
+  if(lastSnap){
+    const cur = lastSnap.currency === 'USD' ? '$' : '€';
+    const total = lastSnap.currency === 'USD' ? lastSnap.totalUsd : lastSnap.totalEur;
+    lines.push(`- **Net worth** (snapshot du ${fmtDateFr(lastSnap.date)}) : ${cur}${(total||0).toLocaleString('fr-FR')}`);
+  }
+  if(state.accounts && state.accounts.length){
+    lines.push(`- **Comptes actuels** :`);
+    state.accounts.forEach(a => {
+      const cur = a.currency === 'USD' ? '$' : '€';
+      lines.push(`  - ${a.name || 'Sans nom'}${a.type ? ' ('+a.type+')' : ''} : ${cur}${(Number(a.amount)||0).toLocaleString('fr-FR')}`);
+    });
+  }
+  const shadowStreak = (typeof computeShadowCleanStreak === 'function') ? computeShadowCleanStreak() : null;
+  if(shadowStreak !== null && shadowStreak !== undefined){
+    lines.push(`- **Shadow** : ${shadowStreak} jour${shadowStreak>1?'s':''} clean`);
+  }
+  if(state.habits && state.habits.length){
+    lines.push(`- **Habits actifs** :`);
+    state.habits.forEach(h => {
+      const s = computeStreak(h);
+      lines.push(`  - « ${h.name} » · ${h.section || 'beta'} · streak ${s}j`);
+    });
+  }
+  const t = state.training;
+  if(t && t.days && t.days.length){
+    lines.push(`- **Programme training** : ${(t.block && t.block.name) || 'sans nom'}${(t.block && t.block.notes) ? ' — ' + t.block.notes : ''}`);
+    t.days.forEach(d => {
+      const exCount = (d.exercises || []).length;
+      lines.push(`  - ${d.name}${d.focus ? ' · ' + d.focus : ''} (${exCount} exercices)`);
+    });
+  }
+  lines.push('');
+
+  // 3. Journal chronologique
+  lines.push(`## Journal des inputs (du plus récent au plus ancien)`);
+  lines.push('');
+
+  const events = []; // { ts, dateKey, time, text }
+
+  // Net worth snapshots
+  (state.nwHistory || []).forEach(s => {
+    const cur = s.currency === 'USD' ? '$' : '€';
+    const total = s.currency === 'USD' ? s.totalUsd : s.totalEur;
+    events.push({
+      ts: s.createdAt || new Date(s.date).getTime(),
+      dateKey: s.date,
+      time: fmtTimeFr(s.createdAt),
+      text: `**Net worth snapshot** : ${cur}${(total||0).toLocaleString('fr-FR')}`,
+    });
+  });
+
+  // Weight entries (no time stored)
+  wHist.forEach(w => {
+    const dk = dateKeyOf(w.date);
+    events.push({
+      ts: new Date(w.date).getTime(),
+      dateKey: dk,
+      time: null,
+      text: `**Poids** : ${w.v} kg`,
+    });
+  });
+
+  // Training validations
+  Object.entries((t && t.trained) || {}).forEach(([dk, ts]) => {
+    events.push({
+      ts: typeof ts === 'number' ? ts : new Date(dk).getTime(),
+      dateKey: dk,
+      time: typeof ts === 'number' ? fmtTimeFr(ts) : null,
+      text: `**Entraînement validé** (jour mardi/jeudi/samedi)`,
+    });
+  });
+
+  // Shadow clean days
+  Object.entries((state.shadow && state.shadow.cleanDays) || {}).forEach(([dk, ts]) => {
+    events.push({
+      ts: typeof ts === 'number' ? ts : new Date(dk).getTime(),
+      dateKey: dk,
+      time: typeof ts === 'number' ? fmtTimeFr(ts) : null,
+      text: `**Shadow · clean** (journée propre validée)`,
+    });
+  });
+
+  // Shadow slips
+  ((state.shadow && state.shadow.occurrences) || []).forEach(o => {
+    events.push({
+      ts: o.createdAt || new Date(o.date).getTime(),
+      dateKey: o.date,
+      time: fmtTimeFr(o.createdAt),
+      text: `**Shadow · slip**${o.note ? ' — note : « ' + o.note + ' »' : ''}`,
+    });
+  });
+
+  // Habits checked (one event per habit per done day, with streak as of that day)
+  (state.habits || []).forEach(h => {
+    Object.entries(h.days || {}).forEach(([dk, done]) => {
+      if(!done) return;
+      const s = streakUpTo(h, dk);
+      events.push({
+        ts: new Date(dk).getTime(),
+        dateKey: dk,
+        time: null,
+        text: `**Habit cochée** : « ${h.name} » → streak ${s} jour${s>1?'s':''}`,
+      });
+    });
+  });
+
+  // Focus sessions
+  ((state.focus && state.focus.history) || []).forEach(f => {
+    events.push({
+      ts: f.completedAt || new Date(f.date).getTime(),
+      dateKey: f.date,
+      time: fmtTimeFr(f.completedAt),
+      text: `**Pomodoro** : ${f.durationMin} min focus terminé`,
+    });
+  });
+
+  // Reflections (weekly)
+  Object.entries(state.reflections || {}).forEach(([weekKey, r]) => {
+    if(!r || (!r.worked && !r.didnt && !r.next)) return;
+    const ts = r.updatedAt || r.createdAt || new Date(weekKey).getTime();
+    const parts = [`**Reflection hebdo** (semaine ${weekKey})`];
+    if(r.worked) parts.push(`    - Ce qui a marché : ${r.worked}`);
+    if(r.didnt) parts.push(`    - Ce qui n'a pas marché : ${r.didnt}`);
+    if(r.next) parts.push(`    - À faire ensuite : ${r.next}`);
+    events.push({ ts, dateKey: dateKeyOf(ts), time: fmtTimeFr(ts), text: parts.join('\n') });
+  });
+
+  // Sort recent first
+  events.sort((a, b) => (b.ts || 0) - (a.ts || 0));
+
+  // Group by date
+  const byDate = new Map();
+  events.forEach(e => {
+    const k = e.dateKey || dateKeyOf(e.ts);
+    if(!byDate.has(k)) byDate.set(k, []);
+    byDate.get(k).push(e);
+  });
+
+  if(byDate.size === 0){
+    lines.push(`_(aucun input enregistré pour le moment)_`);
+  } else {
+    [...byDate.entries()].forEach(([dk, evs]) => {
+      lines.push(`### ${fmtDateFr(dk)}`);
+      evs.sort((a, b) => {
+        const aHas = a.time ? 1 : 0;
+        const bHas = b.time ? 1 : 0;
+        if(aHas !== bHas) return bHas - aHas;
+        return (b.ts || 0) - (a.ts || 0);
+      });
+      evs.forEach(e => {
+        const prefix = e.time ? `${e.time} — ` : '— ';
+        lines.push(`- ${prefix}${e.text}`);
+      });
+      lines.push('');
+    });
+  }
+
+  return lines.join('\n');
+}
+
+function downloadMentorBrief(){
+  try{
+    const text = generateMentorBrief();
+    const stamp = new Date().toISOString().slice(0,16).replace('T', '_').replace(':', '-');
+    const blob = new Blob([text], { type:'text/markdown;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `joe-os-brief_${stamp}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }catch(e){
+    alert('Erreur export brief : ' + (e && e.message ? e.message : e));
+  }
+}
+
+document.getElementById('export-brief-btn')?.addEventListener('click', downloadMentorBrief);
 
 function renderAll(){
   renderNetWorth();
