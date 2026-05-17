@@ -343,8 +343,12 @@
   }
   .nw-chart svg{width:100%;height:200px;display:block;overflow:visible}
   .nw-grid-lines line{stroke:var(--line);stroke-width:1;stroke-dasharray:2 3}
+  .nw-y-label{
+    fill:var(--ink-faint);font-family:'JetBrains Mono',monospace;font-size:10px;
+    font-weight:500;letter-spacing:0.04em;
+  }
   .nw-chart-axis{
-    display:flex;justify-content:space-between;padding:8px 8px 0;
+    display:flex;justify-content:space-between;padding:8px 2.5% 0 7%;
     font-family:'JetBrains Mono',monospace;font-size:9.5px;
     color:var(--ink-faint);letter-spacing:0.08em;font-weight:500;
   }
@@ -1543,6 +1547,42 @@
     content:'';width:9px;height:9px;border-radius:2px;background:var(--blue);
   }
 
+  .training-regularity{
+    margin-bottom:14px;padding:14px 16px 12px;
+    background:var(--surface-2);border:1px solid var(--line);border-radius:12px;
+  }
+  .training-reg-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    margin-bottom:10px;gap:10px;flex-wrap:wrap;
+  }
+  .training-reg-title{
+    font-family:'JetBrains Mono',monospace;font-size:10px;
+    color:var(--ink-dim);letter-spacing:0.14em;text-transform:uppercase;font-weight:600;
+  }
+  .training-reg-stat{
+    font-family:'Inter',sans-serif;font-size:12px;
+    color:var(--ink);font-weight:700;letter-spacing:-0.01em;
+  }
+  .training-reg-stat .pct{color:var(--blue)}
+  .training-reg-grid{
+    display:grid;grid-template-columns:30px repeat(12, 1fr);gap:4px;
+    align-items:center;
+  }
+  .training-reg-row-label{
+    font-family:'JetBrains Mono',monospace;font-size:9px;
+    color:var(--ink-faint);letter-spacing:0.1em;text-transform:uppercase;font-weight:600;
+    text-align:right;padding-right:4px;
+  }
+  .training-reg-cell{
+    aspect-ratio:1;border-radius:4px;background:#fff;border:1px solid var(--line);
+    transition:transform 0.15s ease;cursor:default;
+  }
+  .training-reg-cell.done{background:var(--blue);border-color:var(--blue)}
+  .training-reg-cell.missed{background:rgba(229,56,59,0.14);border-color:rgba(229,56,59,0.22)}
+  .training-reg-cell.today{outline:2px solid var(--blue);outline-offset:1px}
+  .training-reg-cell.future{background:transparent;border-style:dashed;opacity:0.5}
+  .training-reg-cell:hover{transform:scale(1.25);z-index:5}
+
   /* Program header */
   .training-program-header{
     padding:16px 20px;margin-bottom:16px;
@@ -2476,6 +2516,13 @@
           <span class="training-today-box" id="training-today-box"></span>
           <span class="training-today-text" id="training-today-text">J'ai été m'entraîner</span>
         </button>
+      </div>
+      <div class="training-regularity" id="training-regularity">
+        <div class="training-reg-head">
+          <span class="training-reg-title">12 sem · Mar / Jeu / Sam</span>
+          <span class="training-reg-stat" id="training-reg-stat">—</span>
+        </div>
+        <div class="training-reg-grid" id="training-reg-grid"></div>
       </div>
       <div class="training-program-header" id="training-program-header">
         <div class="training-program-name" id="training-program-name">Current program</div>
@@ -3714,14 +3761,14 @@ function renderNwChart(){
   empty.classList.add('hidden');
 
   // Compute chart dimensions
-  const W = 800, H = 200, padX = 20, padY = 20;
+  const W = 800, H = 200, padL = 56, padR = 20, padY = 20;
   const min = Math.min(...values);
   const max = Math.max(...values);
   const range_v = max - min || Math.max(1, Math.abs(max) * 0.1);
   const yMin = min - range_v * 0.1;
   const yMax = max + range_v * 0.1;
   const scaleY = v => H - padY - ((v - yMin) / (yMax - yMin)) * (H - padY * 2);
-  const scaleX = i => padX + (i / (filtered.length - 1)) * (W - padX * 2);
+  const scaleX = i => padL + (i / (filtered.length - 1)) * (W - padL - padR);
 
   const pts = filtered.map((h, i) => [scaleX(i), scaleY(values[i])]);
 
@@ -3730,11 +3777,24 @@ function renderNwChart(){
   line.setAttribute('d', d);
   fill.setAttribute('d', d + ` L${pts[pts.length-1][0].toFixed(1)},${H} L${pts[0][0].toFixed(1)},${H} Z`);
 
-  // Grid lines (3 horizontal)
+  // Y-axis ticks: grid lines + value labels
+  const formatYTick = v => {
+    const abs = Math.abs(v);
+    let n;
+    if(abs >= 1e6) n = (v/1e6).toFixed(abs >= 1e7 ? 0 : 1).replace(/\.0$/,'') + 'M';
+    else if(abs >= 1e3) n = (v/1e3).toFixed(abs >= 1e4 ? 0 : 1).replace(/\.0$/,'') + 'k';
+    else n = Math.round(v).toString();
+    return sym + n;
+  };
   gridLines.innerHTML = '';
-  for(let i=1;i<=3;i++){
-    const y = padY + (i/4) * (H - padY*2);
-    gridLines.innerHTML += `<line x1="${padX}" y1="${y}" x2="${W-padX}" y2="${y}"/>`;
+  const tickCount = 4;
+  for(let i=0;i<=tickCount;i++){
+    const v = yMin + (yMax - yMin) * (i / tickCount);
+    const y = scaleY(v);
+    if(i > 0 && i < tickCount){
+      gridLines.innerHTML += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}"/>`;
+    }
+    gridLines.innerHTML += `<text class="nw-y-label" x="${(padL-8).toFixed(1)}" y="${(y+3.5).toFixed(1)}" text-anchor="end">${formatYTick(v)}</text>`;
   }
 
   // Dots with tooltips
@@ -5143,19 +5203,70 @@ function renderTrainedToday(){
   if(!wrap) return;
   const dayIdx = new Date().getDay();
   const dayName = TRAINING_WEEKDAYS[dayIdx];
-  if(!dayName){
+  if(dayName){
+    wrap.style.display = '';
+    const dayEl = document.getElementById('training-today-day');
+    if(dayEl) dayEl.textContent = dayName;
+    const todayKey = todayDateKey();
+    const isChecked = !!state.training.trained[todayKey];
+    const btn = document.getElementById('training-today-btn');
+    const txt = document.getElementById('training-today-text');
+    if(btn) btn.classList.toggle('checked', isChecked);
+    if(txt) txt.textContent = isChecked ? 'Entraînement validé' : "J'ai été m'entraîner";
+  } else {
     wrap.style.display = 'none';
-    return;
   }
-  wrap.style.display = '';
-  const dayEl = document.getElementById('training-today-day');
-  if(dayEl) dayEl.textContent = dayName;
+  renderTrainingRegularity();
+}
+
+function renderTrainingRegularity(){
+  ensureTrainingState();
+  const grid = document.getElementById('training-reg-grid');
+  const statEl = document.getElementById('training-reg-stat');
+  if(!grid || !statEl) return;
+
+  const trained = state.training.trained || {};
+  const today = new Date();
+  today.setHours(0,0,0,0);
   const todayKey = todayDateKey();
-  const isChecked = !!state.training.trained[todayKey];
-  const btn = document.getElementById('training-today-btn');
-  const txt = document.getElementById('training-today-text');
-  if(btn) btn.classList.toggle('checked', isChecked);
-  if(txt) txt.textContent = isChecked ? 'Entraînement validé' : "J'ai été m'entraîner";
+
+  // Monday of this week (ISO: Mon=1 ... Sun=0 treated as -6)
+  const dow = today.getDay();
+  const offsetToMonday = dow === 0 ? -6 : 1 - dow;
+  const thisMonday = new Date(today);
+  thisMonday.setDate(today.getDate() + offsetToMonday);
+
+  // 3 rows × 12 columns, oldest week first
+  const rowOffsets = [{ label:'MAR', off:1 }, { label:'JEU', off:3 }, { label:'SAM', off:5 }];
+  let html = '';
+  let done = 0, expected = 0;
+
+  rowOffsets.forEach(row => {
+    html += `<div class="training-reg-row-label">${row.label}</div>`;
+    for(let w = 11; w >= 0; w--){
+      const weekStart = new Date(thisMonday);
+      weekStart.setDate(thisMonday.getDate() - w * 7);
+      const d = new Date(weekStart);
+      d.setDate(weekStart.getDate() + row.off);
+      d.setHours(0,0,0,0);
+      const key = d.toISOString().slice(0,10);
+      const isFuture = d > today;
+      const isToday = key === todayKey;
+      const isDone = !!trained[key];
+      let cls = 'training-reg-cell';
+      if(isDone){ cls += ' done'; done++; expected++; }
+      else if(isFuture){ cls += ' future'; }
+      else { cls += ' missed'; expected++; }
+      if(isToday) cls += ' today';
+      const dateStr = d.toLocaleDateString('fr-FR',{ weekday:'short', day:'numeric', month:'short' });
+      const status = isDone ? 'validé' : (isFuture ? 'à venir' : (isToday ? 'aujourd\'hui' : 'manqué'));
+      html += `<div class="${cls}" title="${dateStr} · ${status}"></div>`;
+    }
+  });
+
+  grid.innerHTML = html;
+  const pct = expected > 0 ? Math.round((done / expected) * 100) : 0;
+  statEl.innerHTML = `${done} / ${expected} sessions <span class="pct">· ${pct}%</span>`;
 }
 
 function toggleTrainedToday(){
