@@ -4045,14 +4045,7 @@ function renderTodos(){
   const grid = document.getElementById('lists-grid');
   grid.innerHTML = '';
 
-  // Sort projects: most tasks first (open count descending)
-  const sortedProjects = [...state.projects].sort((a, b) => {
-    const aCount = state.todos.filter(t => t.project === a.id && !t.done).length;
-    const bCount = state.todos.filter(t => t.project === b.id && !t.done).length;
-    return bCount - aCount;
-  });
-
-  sortedProjects.forEach(proj => {
+  state.projects.forEach(proj => {
     const card = document.createElement('div');
     card.className = 'list-card';
     card.dataset.listId = proj.id;
