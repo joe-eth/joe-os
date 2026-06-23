@@ -339,9 +339,8 @@
     position:relative;margin-top:24px;margin-bottom:8px;
     background:transparent;
     border-radius:12px;padding:16px 8px 8px;
-    height:240px;
   }
-  .nw-chart svg{width:100%;height:200px;display:block;overflow:visible}
+  .nw-chart svg{width:100%;height:auto;display:block;overflow:visible}
   .nw-grid-lines line{stroke:var(--line);stroke-width:1;stroke-dasharray:2 3}
   .nw-y-label{
     fill:var(--ink-faint);font-family:'JetBrains Mono',monospace;font-size:10px;
@@ -406,6 +405,17 @@
   .weight-delta.good{background:rgba(24,178,107,0.12);color:var(--green)}
   .weight-delta.bad{background:rgba(229,56,59,0.12);color:var(--red)}
   .weight-spark{height:60px;width:160px}
+  .weight-layout{display:flex;gap:28px;align-items:center;flex-wrap:wrap;position:relative;z-index:1}
+  .weight-now{flex-shrink:0}
+  .weight-chart-wrap{flex:1;min-width:260px;position:relative}
+  .weight-chart{width:100%;height:auto;display:block;overflow:visible}
+  .weight-grid-line{stroke:var(--line);stroke-width:1}
+  .weight-grid-label{fill:var(--ink-faint);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600}
+  .weight-x-label{fill:var(--ink-dim);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600}
+  .weight-dot-pt{fill:#fff;stroke:#1554ff;stroke-width:2}
+  .weight-dot-pt.last{fill:#1554ff}
+  .weight-chart-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;color:var(--ink-faint);font-weight:600;padding:0 20px}
+  .weight-chart-empty.hidden{display:none}
 
   /* WAKE CARD */
   .wake-card{background:var(--navy);color:#fff}
@@ -568,40 +578,47 @@
     border:1.5px dashed var(--line);border-radius:14px;
   }
 
-  /* 7-day history heatmap */
-  .habits-history-wrap{
+  /* Discipline · 30-day consistency */
+  .habits-discipline-wrap{
     margin-bottom:14px;padding:14px 16px;
     background:var(--surface-2);border:1px solid var(--line);border-radius:12px;
   }
-  .habits-history-title{
+  .habits-discipline-head{
+    display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+    flex-wrap:wrap;margin-bottom:12px;
+  }
+  .habits-discipline-title{
     font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--ink-faint);
-    letter-spacing:0.14em;text-transform:uppercase;font-weight:600;margin-bottom:10px;
+    letter-spacing:0.14em;text-transform:uppercase;font-weight:600;
   }
-  .habits-history{
-    display:flex;flex-direction:column;gap:3px;
+  .habits-discipline-stats{
+    display:flex;align-items:baseline;gap:6px;
+    font-family:'Inter',sans-serif;font-size:11px;color:var(--ink-dim);font-weight:600;letter-spacing:-0.01em;
   }
-  .habits-history-row{
-    display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  .hd-streak{font-size:15px;font-weight:800;color:var(--ink);letter-spacing:-0.02em}
+  .hd-streak.hot{color:var(--blue)}
+  .hd-rate{font-size:15px;font-weight:800;color:var(--blue);letter-spacing:-0.02em}
+  .hd-sep{color:var(--ink-faint);margin:0 2px}
+  .habits-discipline-grid{
+    display:grid;grid-template-columns:repeat(15,1fr);gap:4px;
   }
-  .habits-history-name{
-    font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;color:var(--ink);
-    letter-spacing:-0.005em;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  .hd-cell{
+    aspect-ratio:1;border-radius:4px;background:var(--surface);border:1px solid var(--line);
+    transition:transform 0.12s ease;cursor:default;
   }
-  .habits-history-cells{
-    display:flex;gap:3px;
+  .hd-cell.none{background:transparent;border-style:dashed;opacity:0.4}
+  .hd-cell.l1{background:rgba(21,84,255,0.18);border-color:rgba(21,84,255,0.24)}
+  .hd-cell.l2{background:rgba(21,84,255,0.4);border-color:rgba(21,84,255,0.42)}
+  .hd-cell.l3{background:rgba(21,84,255,0.64);border-color:rgba(21,84,255,0.64)}
+  .hd-cell.l4{background:var(--blue);border-color:var(--blue)}
+  .hd-cell.today{outline:2px solid var(--ink);outline-offset:1px}
+  .hd-cell:hover{transform:scale(1.2);z-index:5}
+  .habits-discipline-legend{
+    display:flex;align-items:center;gap:6px;margin-top:11px;
+    font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-faint);letter-spacing:0.08em;
   }
-  .habits-history-cell{
-    width:18px;height:18px;border-radius:4px;
-    background:var(--surface);border:1px solid var(--line);
-    position:relative;
-    display:flex;align-items:center;justify-content:center;
-    font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;
-    color:var(--ink-faint);letter-spacing:-0.01em;
-  }
-  .habits-history-cell.done{background:var(--blue);border-color:var(--blue);color:#fff}
-  .habits-history-cell[data-section="perm"].done{background:var(--navy);border-color:var(--navy)}
-  .habits-history-cell.today{outline:2px solid var(--blue);outline-offset:2px}
+  .hd-legend-cells{display:flex;gap:3px}
+  .hd-legend-cells i{width:11px;height:11px;border-radius:3px;border:1px solid var(--line);display:block}
 
   .habit-add-row{display:flex;gap:8px;margin-top:4px}
   .habit-add-row input{
@@ -620,7 +637,6 @@
     .habit-today-row{padding:10px 12px;gap:10px}
     .habit-today-name{font-size:14px}
     .habit-today-actions{opacity:1}
-    .habits-history-cell{width:14px;height:14px;font-size:7px}
   }
 
   /* ==================== READING ==================== */
@@ -1565,23 +1581,28 @@
   }
   .training-reg-stat .pct{color:var(--blue)}
   .training-reg-grid{
-    display:grid;grid-template-columns:30px repeat(12, 1fr);gap:4px;
-    align-items:center;
+    display:grid;grid-template-columns:repeat(12, 1fr);gap:5px;
+    align-items:end;height:74px;
   }
-  .training-reg-row-label{
-    font-family:'JetBrains Mono',monospace;font-size:9px;
-    color:var(--ink-faint);letter-spacing:0.1em;text-transform:uppercase;font-weight:600;
-    text-align:right;padding-right:4px;
+  .training-reg-col{
+    display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;
+    justify-content:flex-end;cursor:default;
   }
-  .training-reg-cell{
-    aspect-ratio:1;border-radius:4px;background:#fff;border:1px solid var(--line);
-    transition:transform 0.15s ease;cursor:default;
+  .training-reg-barwrap{
+    width:100%;flex:1;display:flex;align-items:flex-end;
+    background:#fff;border:1px solid var(--line);border-radius:5px;overflow:hidden;
   }
-  .training-reg-cell.done{background:var(--blue);border-color:var(--blue)}
-  .training-reg-cell.missed{background:rgba(229,56,59,0.14);border-color:rgba(229,56,59,0.22)}
-  .training-reg-cell.today{outline:2px solid var(--blue);outline-offset:1px}
-  .training-reg-cell.future{background:transparent;border-style:dashed;opacity:0.5}
-  .training-reg-cell:hover{transform:scale(1.25);z-index:5}
+  .training-reg-bar{
+    width:100%;background:var(--blue);border-radius:0 0 4px 4px;
+    transition:height 0.2s ease;min-height:3px;
+  }
+  .training-reg-bar.empty{background:var(--line)}
+  .training-reg-col.current .training-reg-barwrap{outline:2px solid var(--blue);outline-offset:1px}
+  .training-reg-collabel{
+    font-family:'JetBrains Mono',monospace;font-size:10px;
+    color:var(--ink-dim);font-weight:700;
+  }
+  .training-reg-col:hover .training-reg-bar{filter:brightness(1.08)}
 
   /* Program header */
   .training-program-header{
@@ -2264,15 +2285,8 @@
         </button>
       </div>
       <button class="pill-btn cloud-status cloud-offline" id="cloud-status" title="Cloud sync status · click for options">Offline</button>
-      <button class="pill-btn" id="export-brief-btn" title="Exporter un brief (.md) à coller dans un chatbot mentor">
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="margin-right:2px"><path d="M6.5 1v8M3 6l3.5 3.5L10 6M2 11.5h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Brief
-      </button>
-      <button class="pill-btn"><span class="status-dot"></span><span id="hdr-date">—</span></button>
-      <button class="pill-btn dark"><span id="hdr-day">—</span> · <span id="hdr-time">—</span></button>
       <button class="pill-btn"><em id="stat-age" style="font-style:normal;color:var(--blue);font-weight:800">—</em> <span style="color:var(--ink-faint);margin:0 4px">·</span> <span style="font-size:10px;color:var(--ink-dim)">age</span></button>
       <button class="pill-btn"><em id="stat-day-ratio" style="font-style:normal;color:var(--blue);font-weight:800">—</em> <span style="color:var(--ink-faint);margin:0 4px">·</span> <span style="font-size:10px;color:var(--ink-dim)">jour</span></button>
-      <button class="pill-btn"><em id="stat-streak" style="font-style:normal;color:var(--green);font-weight:800">0</em> <span style="color:var(--ink-faint);margin:0 4px">·</span> <span style="font-size:10px;color:var(--ink-dim)">streak</span></button>
     </div>
   </div>
 
@@ -2303,7 +2317,7 @@
 
       <!-- Net Worth History Chart -->
       <div class="nw-chart">
-        <svg id="nw-chart-svg" viewBox="0 0 800 220" preserveAspectRatio="none">
+        <svg id="nw-chart-svg" viewBox="0 0 800 220">
           <defs>
             <linearGradient id="nwg" x1="0" x2="0" y1="0" y2="1">
               <stop offset="0%" stop-color="#1554ff" stop-opacity="0.28"/>
@@ -2343,15 +2357,6 @@
       </div>
     </div>
 
-    <!-- 02 · CRYPTO NOTES -->
-    <div class="card span-12">
-      <div class="label">
-        <span class="label-text">02 · Crypto · Strat & notes</span>
-        <span class="label-tag"><span class="dot" style="background:var(--blue)"></span> Invest</span>
-      </div>
-      <textarea id="crypto-notes" rows="6" spellcheck="false" placeholder="Mes notes d'investissement crypto..." style="width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:14px 16px;color:var(--ink);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;line-height:1.6;letter-spacing:-0.005em;outline:none;resize:vertical;min-height:100px"></textarea>
-    </div>
-
     </div>
   </div>
 
@@ -2375,15 +2380,6 @@
       </div>
     </div>
 
-    <!-- HEATMAP -->
-    <div class="card" style="padding:14px 18px;margin-bottom:16px;border-radius:12px">
-      <div class="label" style="margin-bottom:10px">
-        <span class="label-text">Activity · <span id="heatmap-year">—</span></span>
-        <span class="label-tag"><span id="heatmap-active">0</span> active days</span>
-      </div>
-      <div class="heatmap" id="heatmap"></div>
-    </div>
-
     <div class="grid">
 
     <!-- HABITS -->
@@ -2393,11 +2389,11 @@
         <div style="display:flex;align-items:center;gap:10px">
           <span class="label-tag" id="habits-progress-tag"><b id="habits-done-today">0</b>/<span id="habits-total-today">0</span> done today</span>
           <div class="habits-tabs-new">
-            <button data-section="beta">
-              Beta <span class="count" id="beta-count">0</span>
+            <button class="active" data-section="beta">
+              Morning routine <span class="count" id="beta-count">0</span>
             </button>
-            <button class="active" data-section="perm">
-              Locked <span class="count" id="perm-count">0</span>
+            <button data-section="perm">
+              Routine <span class="count" id="perm-count">0</span>
             </button>
           </div>
         </div>
@@ -2419,26 +2415,26 @@
 
       <div id="habits-today-list"></div>
 
-      <div class="habits-history-wrap" id="habits-history-wrap">
-        <div class="habits-history-title">Last 7 days</div>
-        <div class="habits-history" id="habits-history"></div>
+      <div class="habits-discipline-wrap" id="habits-history-wrap">
+        <div class="habits-discipline-head">
+          <span class="habits-discipline-title">Discipline · 30 derniers jours</span>
+          <span class="habits-discipline-stats">
+            <span class="hd-streak" id="hd-streak">0</span><span>j de série</span>
+            <span class="hd-sep">·</span>
+            <span class="hd-rate" id="hd-rate">—</span><span>assidu</span>
+          </span>
+        </div>
+        <div class="habits-discipline-grid" id="habits-discipline-grid"></div>
+        <div class="habits-discipline-legend">
+          <span>Moins</span>
+          <span class="hd-legend-cells"><i class="hd-cell l1"></i><i class="hd-cell l2"></i><i class="hd-cell l3"></i><i class="hd-cell l4"></i></span>
+          <span>Plus</span>
+        </div>
       </div>
 
       <div class="habit-add-row">
-        <input type="text" id="habit-new" placeholder="+ Add habit to beta testing…">
+        <input type="text" id="habit-new" placeholder="+ Add to morning routine…">
       </div>
-    </div>
-
-    <!-- TASKS -->
-    <div class="card todo span-12" data-panel="tasks">
-      <div class="label">
-        <span class="label-text">Tasks</span>
-        <div style="display:flex;align-items:center;gap:12px">
-          <span class="label-tag" id="todo-count">0 open</span>
-          <button class="pill-btn" id="add-list-btn" style="height:32px;padding:0 14px;font-size:11px">+ New list</button>
-        </div>
-      </div>
-      <div class="lists-grid" id="lists-grid"></div>
     </div>
 
     </div>
@@ -2468,35 +2464,39 @@
     </div>
 
     <!-- S2 WEIGHT -->
-    <div class="card span-6">
+    <div class="card span-12">
       <div class="label">
         <span class="label-text">S2 · Weight</span>
         <span class="label-tag" id="weight-date">Today</span>
       </div>
-      <div class="mini-body">
-        <div>
+      <div class="weight-layout">
+        <div class="weight-now">
           <div class="weight-val-wrap">
             <input type="number" step="0.1" class="weight-input" id="weight-input" placeholder="—">
             <span class="weight-unit">kg</span>
           </div>
           <div class="weight-delta" id="weight-delta">Track to see trend</div>
         </div>
-        <svg class="weight-spark" viewBox="0 0 160 60" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="wg" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stop-color="#1554ff" stop-opacity="0.25"/>
-              <stop offset="100%" stop-color="#1554ff" stop-opacity="0"/>
-            </linearGradient>
-          </defs>
-          <path id="weight-path-fill" d="" fill="url(#wg)"/>
-          <path id="weight-path" d="" fill="none" stroke="#1554ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle id="weight-dot" cx="0" cy="0" r="0" fill="#1554ff" stroke="#fff" stroke-width="2"/>
-        </svg>
+        <div class="weight-chart-wrap">
+          <svg class="weight-chart" id="weight-chart" viewBox="0 0 720 200">
+            <defs>
+              <linearGradient id="wg" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#1554ff" stop-opacity="0.18"/>
+                <stop offset="100%" stop-color="#1554ff" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <g id="weight-grid"></g>
+            <path id="weight-path-fill" d="" fill="url(#wg)"/>
+            <path id="weight-path" d="" fill="none" stroke="#1554ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <g id="weight-dots"></g>
+          </svg>
+          <div class="weight-chart-empty" id="weight-chart-empty">Saisissez au moins 2 pesées pour voir la courbe</div>
+        </div>
       </div>
     </div>
 
     <!-- S3 TRAINING -->
-    <div class="card training span-6" id="training-card">
+    <div class="card training span-12" id="training-card">
       <div class="label">
         <span class="label-text">S3 · Training</span>
         <div style="display:flex;align-items:center;gap:12px">
@@ -2507,10 +2507,10 @@
           </button>
         </div>
       </div>
-      <div class="training-today-check" id="training-today-check" style="display:none">
+      <div class="training-today-check" id="training-today-check">
         <div class="training-today-info">
           <div class="training-today-day" id="training-today-day">—</div>
-          <div class="training-today-sub">jour d'entraînement</div>
+          <div class="training-today-sub">Séance libre · n'importe quel jour</div>
         </div>
         <button class="training-today-btn" id="training-today-btn" type="button">
           <span class="training-today-box" id="training-today-box"></span>
@@ -2519,7 +2519,7 @@
       </div>
       <div class="training-regularity" id="training-regularity">
         <div class="training-reg-head">
-          <span class="training-reg-title">12 sem · Mar / Jeu / Sam</span>
+          <span class="training-reg-title">Séances · 12 dernières semaines</span>
           <span class="training-reg-stat" id="training-reg-stat">—</span>
         </div>
         <div class="training-reg-grid" id="training-reg-grid"></div>
@@ -2976,6 +2976,8 @@ const CHUNK_PAYLOADS = {
     chartRange: state.chartRange,
     activeView: state.activeView,
     manifesto: state.manifesto,
+    manifestoUpdatedAt: state.manifestoUpdatedAt,
+    morningRoutineSeeded: state.morningRoutineSeeded,
     cryptoNotes: state.cryptoNotes,
     panelOrder: state.panelOrder,
   }),
@@ -3105,6 +3107,8 @@ async function init(){
     const defaultText = 'Take life seriously.\nUnbothered, happy in my *own lane*.\nPush yourself.\nIt\'s cringe until *you win*.\nConsistency.';
     phrasesEl.innerHTML = manifestoTextToHtml(defaultText);
     state.manifesto = phrasesEl.innerHTML;
+    // Persist the default (timestamp stays 0 so any real edit always wins).
+    save('core');
   }
 
   // FX rate: fetch if never fetched or >6h old
@@ -3128,6 +3132,11 @@ async function init(){
       openSignInModal();
     }
   }
+
+  // One-time data migrations, now that state has settled (local + any cloud
+  // pull). Idempotent — gated on flags — so re-running is harmless.
+  migrateMorningRoutine();
+  renderAll();
 }
 
 async function loadFromLocal(){
@@ -3183,11 +3192,11 @@ async function loadFromLocal(){
       {id:crypto.randomUUID(), name:'Brokerage', type:'Investment', amount:0, currency:'USD', color:'#0a1733', liquid:false},
     ];
     state.habits = [
-      {id:crypto.randomUUID(), name:'Cold shower', section:'beta', days:{}, createdAt:Date.now()},
-      {id:crypto.randomUUID(), name:'No phone before 9am', section:'beta', days:{}, createdAt:Date.now()},
+      ...MORNING_ROUTINE_HABITS.map(name => ({id:crypto.randomUUID(), name, section:'beta', days:{}, createdAt:Date.now()})),
       {id:crypto.randomUUID(), name:'Read · 30min', section:'perm', days:{}, createdAt:Date.now()},
       {id:crypto.randomUUID(), name:'Gym', section:'perm', days:{}, createdAt:Date.now()},
     ];
+    state.morningRoutineSeeded = true;
     state.projects = [
       {id:'inbox', name:'Inbox', color:'#9aa2b3'},
       {id:crypto.randomUUID(), name:'Personal', color:'#18b26b'},
@@ -3211,7 +3220,19 @@ async function cloudSyncPull(){
 
   // Apply each key. State's matching property names:
   const keyToStateUpdater = {
-    [STORAGE_KEYS.core]: (v) => { state = {...state, ...v}; },
+    [STORAGE_KEYS.core]: (v) => {
+      // Keep the newer manifesto: a stale cloud snapshot must never clobber a
+      // fresh local edit that hasn't been pushed yet.
+      const localManifesto = state.manifesto;
+      const localTs = state.manifestoUpdatedAt || 0;
+      const cloudTs = v.manifestoUpdatedAt || 0;
+      state = {...state, ...v};
+      if(localManifesto && localTs > cloudTs){
+        state.manifesto = localManifesto;
+        state.manifestoUpdatedAt = localTs;
+        manifestoLocalWins = true;
+      }
+    },
     [STORAGE_KEYS.accounts]: (v) => { state.accounts = v; },
     [STORAGE_KEYS.weight]: (v) => { state.weight = v; },
     [STORAGE_KEYS.nwHist]: (v) => { state.nwHistory = v; },
@@ -3224,6 +3245,7 @@ async function cloudSyncPull(){
     [STORAGE_KEYS.focus]: (v) => { state.focus = v; },
     [STORAGE_KEYS.shadow]: (v) => { state.shadow = v; },
   };
+  let manifestoLocalWins = false;
   Object.entries(byKey).forEach(([k, v]) => {
     if(keyToStateUpdater[k]){
       keyToStateUpdater[k](v);
@@ -3231,6 +3253,11 @@ async function cloudSyncPull(){
       try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){}
     }
   });
+
+  // Local manifesto edit was newer than the cloud snapshot — push it back so
+  // both localStorage and the cloud reflect the fresh value (the loop above
+  // overwrote localStorage with the stale cloud core).
+  if(manifestoLocalWins) save('core');
 
   // Migrate old manifesto format (sep spans) to new phrase pills
   if(state.manifesto && state.manifesto.includes('class="sep"') && !state.manifesto.includes('manifesto-phrase')){
@@ -3248,6 +3275,8 @@ async function cloudSyncPull(){
     const cn = document.getElementById('crypto-notes');
     if(cn) cn.value = state.cryptoNotes;
   }
+  // Apply one-time migrations on the authoritative (post-pull) state.
+  migrateMorningRoutine();
   renderAll();
   return true;
 }
@@ -3382,10 +3411,6 @@ const BIRTHDAY = new Date(1997, 3, 23); // 23 April 1997 (month is 0-indexed)
 
 function updateClock(){
   const d = new Date();
-  document.getElementById('hdr-date').textContent = d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  document.getElementById('hdr-day').textContent = d.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase();
-  document.getElementById('hdr-time').textContent = d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
-
   const start = new Date(d.getFullYear(), 0, 0);
   const diff = d - start;
   const dayOfYear = Math.floor(diff / (1000*60*60*24));
@@ -3405,21 +3430,6 @@ function updateClock(){
   const daysSinceBirthday = Math.floor((d - lastBirthday) / (1000*60*60*24));
   const ageEl = document.getElementById('stat-age');
   if(ageEl) ageEl.innerHTML = `${years}<span style="font-size:0.6em;color:var(--ink-dim);font-style:normal;margin:0 4px">·</span>${daysSinceBirthday}`;
-
-  // Global streak: consecutive days with at least 1 habit done
-  const streakEl = document.getElementById('stat-streak');
-  if(streakEl && state.habits && state.habits.length > 0){
-    let streak = 0;
-    for(let i = 0; i < 365; i++){
-      const check = new Date(d);
-      check.setDate(d.getDate() - i);
-      const key = check.toISOString().slice(0,10);
-      const anyDone = state.habits.some(h => h.days && h.days[key]);
-      if(anyDone) streak++;
-      else break;
-    }
-    streakEl.textContent = streak;
-  }
 }
 
 // ==================== VIEW SWITCHING ====================
@@ -3502,6 +3512,7 @@ function saveManifestoFromModal(){
     quote.innerHTML = fallback;
     state.manifesto = fallback;
   }
+  state.manifestoUpdatedAt = Date.now();
   save('core');
   closeManifestoModal();
 }
@@ -3663,32 +3674,72 @@ document.getElementById('add-account').addEventListener('click', () => {
 // ==================== WEIGHT ====================
 function renderWeight(){
   const input = document.getElementById('weight-input');
+  if(!input) return;
   input.value = state.weight.current || '';
-  const h = (state.weight.history||[]).map(x => typeof x === 'object' ? x.v : x);
+  // Normalise history into {date, v} entries (legacy entries were raw numbers).
+  const hist = (state.weight.history||[]).map(x => typeof x === 'object' ? x : {date:null, v:x});
+  const h = hist.map(x => x.v);
+
   const deltaEl = document.getElementById('weight-delta');
-  if(h.length >= 2){
-    const delta = h[h.length-1] - h[0];
-    deltaEl.textContent = (delta >= 0 ? '▲ +' : '▼ -') + Math.abs(delta).toFixed(1) + ' kg · ' + h.length + 'd';
-    deltaEl.className = 'weight-delta ' + (delta > 0.3 ? 'bad' : delta < -0.3 ? 'good' : '');
-  } else {
-    deltaEl.textContent = 'Track to see trend';
-    deltaEl.className = 'weight-delta';
+  if(deltaEl){
+    if(h.length >= 2){
+      const delta = h[h.length-1] - h[0];
+      deltaEl.textContent = (delta >= 0 ? '▲ +' : '▼ -') + Math.abs(delta).toFixed(1) + ' kg · ' + h.length + ' pesées';
+      deltaEl.className = 'weight-delta ' + (delta > 0.3 ? 'bad' : delta < -0.3 ? 'good' : '');
+    } else {
+      deltaEl.textContent = 'Track to see trend';
+      deltaEl.className = 'weight-delta';
+    }
   }
-  document.getElementById('weight-date').textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  const dateEl = document.getElementById('weight-date');
+  if(dateEl) dateEl.textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
 
   const path = document.getElementById('weight-path');
   const fill = document.getElementById('weight-path-fill');
-  const dot = document.getElementById('weight-dot');
-  if(h.length < 2){ path.setAttribute('d',''); fill.setAttribute('d',''); dot.setAttribute('r','0'); return; }
-  const min = Math.min(...h), max = Math.max(...h), range = max - min || 1;
-  const pts = h.map((v,i) => [i/(h.length-1)*160, 50 - ((v-min)/range)*40+5]);
-  const d = 'M'+pts.map(p=>p.join(',')).join(' L');
+  const dots = document.getElementById('weight-dots');
+  const grid = document.getElementById('weight-grid');
+  const emptyEl = document.getElementById('weight-chart-empty');
+  if(!path || !fill || !dots || !grid) return;
+
+  if(h.length < 2){
+    path.setAttribute('d',''); fill.setAttribute('d','');
+    dots.innerHTML = ''; grid.innerHTML = '';
+    if(emptyEl) emptyEl.classList.remove('hidden');
+    return;
+  }
+  if(emptyEl) emptyEl.classList.add('hidden');
+
+  const W=720, H=200, padL=46, padR=16, padT=18, padB=26;
+  const plotW = W-padL-padR, plotH = H-padT-padB;
+  const min = Math.min(...h), max = Math.max(...h);
+  const sp = (max - min) || 1;
+  const lo = min - sp*0.15, hi = max + sp*0.15;
+  const yFor = v => padT + (1 - (v-lo)/(hi-lo)) * plotH;
+  const xFor = i => padL + (i/(h.length-1)) * plotW;
+  const fmtDay = d => d ? new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}) : '';
+
+  // Horizontal gridlines + y-axis labels (max / mid / min of actual weigh-ins)
+  let gridHtml = [max, (max+min)/2, min].map(v => {
+    const y = yFor(v).toFixed(1);
+    return `<line class="weight-grid-line" x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}"/>`
+         + `<text class="weight-grid-label" x="${padL-8}" y="${(parseFloat(y)+4).toFixed(1)}" text-anchor="end">${v.toFixed(1)}</text>`;
+  }).join('');
+  // X-axis date labels (first + last weigh-in)
+  const first = fmtDay(hist[0].date), last = fmtDay(hist[hist.length-1].date);
+  if(first) gridHtml += `<text class="weight-x-label" x="${padL}" y="${H-6}" text-anchor="start">${first}</text>`;
+  if(last)  gridHtml += `<text class="weight-x-label" x="${W-padR}" y="${H-6}" text-anchor="end">${last}</text>`;
+  grid.innerHTML = gridHtml;
+
+  const pts = h.map((v,i) => [xFor(i), yFor(v)]);
+  const d = 'M' + pts.map(p => p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L');
   path.setAttribute('d', d);
-  fill.setAttribute('d', d + ` L160,60 L0,60 Z`);
-  const last = pts[pts.length-1];
-  dot.setAttribute('cx', last[0]);
-  dot.setAttribute('cy', last[1]);
-  dot.setAttribute('r', '4');
+  fill.setAttribute('d', d + ` L${(W-padR).toFixed(1)},${(H-padB).toFixed(1)} L${padL.toFixed(1)},${(H-padB).toFixed(1)} Z`);
+
+  dots.innerHTML = pts.map((p,i) => {
+    const isLast = i === pts.length-1;
+    const ds = hist[i].date ? new Date(hist[i].date).toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'}) : '';
+    return `<circle class="weight-dot-pt${isLast?' last':''}" cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${isLast?4.5:3.5}"><title>${ds} · ${h[i].toFixed(1)} kg</title></circle>`;
+  }).join('');
 }
 
 document.getElementById('weight-input').addEventListener('change', e => {
@@ -3878,10 +3929,24 @@ function renderReading(){}
 function hashStr(s){ let h=0; for(let c of s) h = (h<<5)-h+c.charCodeAt(0)|0; return Math.abs(h); }
 
 // ==================== HABITS ====================
-let habitsTab = 'perm';
+const MORNING_ROUTINE_HABITS = ['Water intake','Bain froid','Wird au soleil','Skincare','Outfit change','Rangement','Nettoyage lunettes'];
+
+// One-time migration: replace the legacy "beta" habits with the fixed morning
+// routine. Gated on a flag stored in `core` so it runs exactly once per account.
+// Called after state has settled (post local-load and post cloud-pull).
+function migrateMorningRoutine(){
+  if(state.morningRoutineSeeded) return;
+  state.habits = (state.habits || []).filter(h => h.section !== 'beta');
+  MORNING_ROUTINE_HABITS.forEach(name => {
+    state.habits.push({id:crypto.randomUUID(), name, section:'beta', days:{}, createdAt:Date.now()});
+  });
+  state.morningRoutineSeeded = true;
+  save('habits'); save('core');
+}
+
+let habitsTab = 'beta';
 function renderHabits(){
   const todayList = document.getElementById('habits-today-list');
-  const historyEl = document.getElementById('habits-history');
   if(!todayList) return;
   todayList.innerHTML = '';
 
@@ -3893,8 +3958,8 @@ function renderHabits(){
   document.getElementById('beta-count').textContent = betaCount;
   document.getElementById('perm-count').textContent = permCount;
   document.getElementById('habit-new').placeholder = habitsTab === 'beta'
-    ? '+ Add habit to beta testing…'
-    : '+ Add habit to locked-in…';
+    ? '+ Add to morning routine…'
+    : '+ Add to routine…';
 
   // Today's date header
   const now = new Date();
@@ -3932,7 +3997,7 @@ function renderHabits(){
   const motto = document.getElementById('habits-today-motto');
   if(motto){
     if(totalToday === 0){
-      motto.textContent = habitsTab === 'beta' ? 'Add your first beta habit' : 'No locked-in habits yet';
+      motto.textContent = habitsTab === 'beta' ? 'Add your first morning habit' : 'No routine habits yet';
     } else if(pct === 100){
       motto.textContent = '✓ All done · locked in for today';
     } else if(pct >= 50){
@@ -3946,7 +4011,7 @@ function renderHabits(){
 
   // Today's list
   if(filtered.length === 0){
-    todayList.innerHTML = `<div class="habits-empty">No ${habitsTab === 'beta' ? 'beta' : 'locked-in'} habits yet · add one below</div>`;
+    todayList.innerHTML = `<div class="habits-empty">No ${habitsTab === 'beta' ? 'morning routine' : 'routine'} habits yet · add one below</div>`;
   } else {
     // Sort: undone first, then done
     const sorted = filtered.slice().sort((a,b) => {
@@ -3969,7 +4034,7 @@ function renderHabits(){
         <div class="habit-today-body">
           <input class="habit-today-name-input" value="${escapeHtml(habit.name)}" data-id="${habit.id}">
           <div class="habit-today-meta">
-            <span class="habit-today-badge ${habit.section}">${habit.section === 'beta' ? 'Beta' : 'Core'}</span>
+            <span class="habit-today-badge ${habit.section}">${habit.section === 'beta' ? 'Matin' : 'Routine'}</span>
             <span class="habit-today-streak ${streak >= 7 ? 'hot' : ''}">${streak === 0 ? 'No streak yet' : streak === 1 ? '1 day streak' : `${streak} day streak`}</span>
           </div>
         </div>
@@ -3985,36 +4050,8 @@ function renderHabits(){
     });
   }
 
-  // History heatmap (last 7 days including today) — for CURRENT TAB habits
-  if(historyEl){
-    historyEl.innerHTML = '';
-    if(filtered.length === 0){
-      document.getElementById('habits-history-wrap').style.display = 'none';
-    } else {
-      document.getElementById('habits-history-wrap').style.display = '';
-      const days = [];
-      for(let i = 6; i >= 0; i--){
-        const d = new Date(now); d.setDate(now.getDate() - i);
-        days.push(d);
-      }
-      filtered.forEach(habit => {
-        const row = document.createElement('div');
-        row.className = 'habits-history-row';
-        const cellsHtml = days.map(d => {
-          const key = d.toISOString().slice(0,10);
-          const done = !!(habit.days && habit.days[key]);
-          const isToday = key === todayKey;
-          const dow = d.toLocaleDateString('en-US', { weekday:'narrow' });
-          return `<div class="habits-history-cell ${done ? 'done' : ''} ${isToday ? 'today' : ''}" data-section="${habit.section}" title="${d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}${done ? ' · done' : ''}">${dow}</div>`;
-        }).join('');
-        row.innerHTML = `
-          <div class="habits-history-name">${escapeHtml(habit.name)}</div>
-          <div class="habits-history-cells">${cellsHtml}</div>
-        `;
-        historyEl.appendChild(row);
-      });
-    }
-  }
+  // Discipline · 30-day consistency for the CURRENT TAB's habits
+  renderHabitsDiscipline(filtered, now, todayKey);
 
   // Wire events
   // Click anywhere on row (except input / buttons) to toggle
@@ -4061,6 +4098,78 @@ function renderHabits(){
   });
 }
 
+// Discipline view: 30-day consistency heatmap + streak + assiduity rate for a
+// set of habits (the current tab). Days before a habit existed don't count
+// against it, so the view is honest from day one — no wall of "missed".
+function renderHabitsDiscipline(filtered, now, todayKey){
+  const wrap = document.getElementById('habits-history-wrap');
+  const grid = document.getElementById('habits-discipline-grid');
+  const streakEl = document.getElementById('hd-streak');
+  const rateEl = document.getElementById('hd-rate');
+  if(!wrap || !grid) return;
+  if(filtered.length === 0){ wrap.style.display = 'none'; return; }
+  wrap.style.display = '';
+
+  // Completion of a set on a given day, counting only habits that already
+  // existed that day. Day keys are derived exactly like the check-off toggle
+  // (current moment shifted by N days) so lookups always line up. Existence is
+  // a chronological string compare on YYYY-MM-DD keys. Returns {key, done, total}.
+  const dayStats = (d) => {
+    const key = d.toISOString().slice(0,10);
+    const existing = filtered.filter(h => new Date(h.createdAt || 0).toISOString().slice(0,10) <= key);
+    const done = existing.filter(h => h.days && h.days[key]).length;
+    return { key, total: existing.length, done };
+  };
+
+  // Build the last 30 days (oldest first).
+  const DAYS = 30;
+  let doneSum = 0, possibleSum = 0;
+  const cells = [];
+  for(let i = DAYS - 1; i >= 0; i--){
+    const d = new Date(now); d.setDate(now.getDate() - i);
+    const s = dayStats(d);
+    cells.push({ d, ...s });
+    if(s.total > 0){ doneSum += s.done; possibleSum += s.total; }
+  }
+
+  grid.innerHTML = cells.map(c => {
+    let cls = 'hd-cell';
+    if(c.total === 0){ cls += ' none'; }
+    else {
+      const frac = c.done / c.total;
+      if(frac >= 1) cls += ' l4';
+      else if(frac >= 0.67) cls += ' l3';
+      else if(frac >= 0.34) cls += ' l2';
+      else if(frac > 0) cls += ' l1';
+    }
+    if(c.key === todayKey) cls += ' today';
+    const label = c.d.toLocaleDateString('fr-FR',{ weekday:'short', day:'numeric', month:'short' });
+    const detail = c.total === 0 ? 'aucune habitude' : `${c.done}/${c.total} faites`;
+    return `<div class="${cls}" title="${label} · ${detail}"></div>`;
+  }).join('');
+
+  // Assiduity: share of all checks completed across the window.
+  const rate = possibleSum > 0 ? Math.round((doneSum / possibleSum) * 100) : 0;
+  if(rateEl) rateEl.textContent = rate + '%';
+
+  // Streak: consecutive full days (every existing habit done). If today isn't
+  // complete yet, start from yesterday so the streak isn't prematurely zeroed.
+  const today = cells[cells.length - 1];
+  let streak = 0;
+  let start = (today.total > 0 && today.done === today.total) ? 0 : 1;
+  for(let i = start; i < 365; i++){
+    const d = new Date(now); d.setDate(now.getDate() - i);
+    const s = dayStats(d);
+    if(s.total === 0) break;          // before the routine existed
+    if(s.done === s.total) streak++;
+    else break;
+  }
+  if(streakEl){
+    streakEl.textContent = streak;
+    streakEl.classList.toggle('hot', streak >= 3);
+  }
+}
+
 function computeStreak(habit){
   let streak = 0;
   const now = new Date();
@@ -4103,6 +4212,7 @@ document.getElementById('habit-new').addEventListener('keydown', e => {
 // ==================== TODOS (multi-list grid) ====================
 function renderTodos(){
   const grid = document.getElementById('lists-grid');
+  if(!grid) return;
   grid.innerHTML = '';
 
   state.projects.forEach(proj => {
@@ -4237,7 +4347,7 @@ function renderTodos(){
 }
 
 // Add list button in header
-document.getElementById('add-list-btn').addEventListener('click', openProjectModal);
+document.getElementById('add-list-btn')?.addEventListener('click', openProjectModal);
 
 // ==================== MODAL ====================
 let modalSelectedColor = COLORS[0];
@@ -5194,28 +5304,23 @@ function ensureTrainingState(){
   state.training.trained = state.training.trained || {}; // { 'YYYY-MM-DD': timestamp }
 }
 
-// Tue=2, Thu=4, Sat=6
-const TRAINING_WEEKDAYS = { 2:'Mardi', 4:'Jeudi', 6:'Samedi' };
-
 function renderTrainedToday(){
   ensureTrainingState();
   const wrap = document.getElementById('training-today-check');
   if(!wrap) return;
-  const dayIdx = new Date().getDay();
-  const dayName = TRAINING_WEEKDAYS[dayIdx];
-  if(dayName){
-    wrap.style.display = '';
-    const dayEl = document.getElementById('training-today-day');
-    if(dayEl) dayEl.textContent = dayName;
-    const todayKey = todayDateKey();
-    const isChecked = !!state.training.trained[todayKey];
-    const btn = document.getElementById('training-today-btn');
-    const txt = document.getElementById('training-today-text');
-    if(btn) btn.classList.toggle('checked', isChecked);
-    if(txt) txt.textContent = isChecked ? 'Entraînement validé' : "J'ai été m'entraîner";
-  } else {
-    wrap.style.display = 'none';
+  // Flexible logging: the button is available every day, not only on planned days.
+  wrap.style.display = '';
+  const dayEl = document.getElementById('training-today-day');
+  if(dayEl){
+    const label = new Date().toLocaleDateString('fr-FR',{ weekday:'long', day:'numeric', month:'long' });
+    dayEl.textContent = label.charAt(0).toUpperCase() + label.slice(1);
   }
+  const todayKey = todayDateKey();
+  const isChecked = !!state.training.trained[todayKey];
+  const btn = document.getElementById('training-today-btn');
+  const txt = document.getElementById('training-today-text');
+  if(btn) btn.classList.toggle('checked', isChecked);
+  if(txt) txt.textContent = isChecked ? 'Entraînement validé' : "J'ai été m'entraîner";
   renderTrainingRegularity();
 }
 
@@ -5228,7 +5333,6 @@ function renderTrainingRegularity(){
   const trained = state.training.trained || {};
   const today = new Date();
   today.setHours(0,0,0,0);
-  const todayKey = todayDateKey();
 
   // Monday of this week (ISO: Mon=1 ... Sun=0 treated as -6)
   const dow = today.getDay();
@@ -5236,37 +5340,37 @@ function renderTrainingRegularity(){
   const thisMonday = new Date(today);
   thisMonday.setDate(today.getDate() + offsetToMonday);
 
-  // 3 rows × 12 columns, oldest week first
-  const rowOffsets = [{ label:'MAR', off:1 }, { label:'JEU', off:3 }, { label:'SAM', off:5 }];
-  let html = '';
-  let done = 0, expected = 0;
-
-  rowOffsets.forEach(row => {
-    html += `<div class="training-reg-row-label">${row.label}</div>`;
-    for(let w = 11; w >= 0; w--){
-      const weekStart = new Date(thisMonday);
-      weekStart.setDate(thisMonday.getDate() - w * 7);
-      const d = new Date(weekStart);
-      d.setDate(weekStart.getDate() + row.off);
-      d.setHours(0,0,0,0);
-      const key = d.toISOString().slice(0,10);
-      const isFuture = d > today;
-      const isToday = key === todayKey;
-      const isDone = !!trained[key];
-      let cls = 'training-reg-cell';
-      if(isDone){ cls += ' done'; done++; expected++; }
-      else if(isFuture){ cls += ' future'; }
-      else { cls += ' missed'; expected++; }
-      if(isToday) cls += ' today';
-      const dateStr = d.toLocaleDateString('fr-FR',{ weekday:'short', day:'numeric', month:'short' });
-      const status = isDone ? 'validé' : (isFuture ? 'à venir' : (isToday ? 'aujourd\'hui' : 'manqué'));
-      html += `<div class="${cls}" title="${dateStr} · ${status}"></div>`;
+  // One bar per week: count sessions that week, regardless of which day.
+  const WEEKS = 12;
+  const weeks = [];
+  let total = 0;
+  for(let w = WEEKS - 1; w >= 0; w--){
+    const weekStart = new Date(thisMonday);
+    weekStart.setDate(thisMonday.getDate() - w * 7);
+    let count = 0;
+    for(let d = 0; d < 7; d++){
+      const day = new Date(weekStart);
+      day.setDate(weekStart.getDate() + d);
+      day.setHours(0,0,0,0);
+      if(day > today) continue; // don't count future days
+      if(trained[day.toISOString().slice(0,10)]) count++;
     }
-  });
+    weeks.push({ weekStart, count, isCurrent: w === 0 });
+    total += count;
+  }
 
-  grid.innerHTML = html;
-  const pct = expected > 0 ? Math.round((done / expected) * 100) : 0;
-  statEl.innerHTML = `${done} / ${expected} sessions <span class="pct">· ${pct}%</span>`;
+  const maxCount = Math.max(1, ...weeks.map(wk => wk.count));
+  grid.innerHTML = weeks.map(wk => {
+    const pct = Math.round((wk.count / maxCount) * 100);
+    const label = wk.weekStart.toLocaleDateString('fr-FR',{ day:'numeric', month:'short' });
+    const cls = 'training-reg-bar' + (wk.count === 0 ? ' empty' : '');
+    return `<div class="training-reg-col${wk.isCurrent ? ' current' : ''}" title="Semaine du ${label} · ${wk.count} séance${wk.count > 1 ? 's' : ''}">`
+         + `<div class="training-reg-barwrap"><div class="${cls}" style="height:${Math.max(pct, 8)}%"></div></div>`
+         + `<div class="training-reg-collabel">${wk.count}</div></div>`;
+  }).join('');
+
+  const avg = total / WEEKS;
+  statEl.innerHTML = `${total} séances <span class="pct">· ${avg.toFixed(1)}/sem</span>`;
 }
 
 function toggleTrainedToday(){
@@ -5850,9 +5954,9 @@ function renderGrowthAnalytics(){
   const lockedCount = state.habits.filter(h => h.section === 'perm').length;
   const betaCount = state.habits.filter(h => h.section === 'beta').length;
   document.getElementById('gm-habits-locked').textContent = lockedCount;
-  document.getElementById('gm-habits-sub').textContent = betaCount === 0 
-    ? 'No new habits in testing'
-    : `${betaCount} in beta testing`;
+  document.getElementById('gm-habits-sub').textContent = betaCount === 0
+    ? 'No morning routine habits'
+    : `${betaCount} in morning routine`;
 
   // === Per-habit breakdown (last 30 days) ===
   const habitsList = document.getElementById('gm-habits-list');
@@ -5874,7 +5978,7 @@ function renderGrowthAnalytics(){
       const colorClass = pct >= 80 ? 'top' : pct >= 50 ? 'mid' : pct >= 20 ? 'low' : 'cold';
       row.innerHTML = `
         <div class="gm-habit-name">
-          <span class="gm-habit-badge ${habit.section}">${habit.section === 'beta' ? 'Beta' : 'Core'}</span>
+          <span class="gm-habit-badge ${habit.section}">${habit.section === 'beta' ? 'Matin' : 'Routine'}</span>
           ${escapeHtml(habit.name)}
         </div>
         <div class="gm-habit-bar">
@@ -6006,7 +6110,7 @@ function openDotPopover(dotEl, dateKey){
       row.innerHTML = `
         <div class="dot-pop-habit-check${done ? ' done' : ''}"></div>
         <div>${escapeHtml(h.name)}</div>
-        <div class="dot-pop-habit-badge ${h.section}">${h.section === 'beta' ? 'Beta' : 'Core'}</div>
+        <div class="dot-pop-habit-badge ${h.section}">${h.section === 'beta' ? 'Matin' : 'Routine'}</div>
       `;
       habitsList.appendChild(row);
     });
@@ -6246,51 +6350,6 @@ function movePanelInGrid(grid, panel, dir){
 }
 
 // ==================== HEATMAP ====================
-function renderHeatmap(){
-  const grid = document.getElementById('heatmap');
-  if(!grid) return;
-  grid.innerHTML = '';
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const todayKey = now.toISOString().slice(0, 10);
-  const monthName = now.toLocaleDateString('fr-FR', {month:'long'});
-
-  document.getElementById('heatmap-year').textContent = monthName + ' ' + year;
-  grid.style.gridTemplateColumns = `repeat(${daysInMonth}, 1fr)`;
-
-  // Build activity map for this month
-  const activityMap = {};
-  (state.habits || []).forEach(h => {
-    if(!h.days) return;
-    Object.keys(h.days).forEach(key => {
-      activityMap[key] = (activityMap[key] || 0) + 1;
-    });
-  });
-
-  const totalHabits = (state.habits || []).length || 1;
-  let activeDays = 0;
-
-  for(let d = 1; d <= daysInMonth; d++){
-    const date = new Date(year, month, d);
-    const key = date.toISOString().slice(0, 10);
-    const count = activityMap[key] || 0;
-    const isFuture = date > now;
-    const isToday = key === todayKey;
-
-    const cell = document.createElement('div');
-    const pct = count / totalHabits;
-    const level = count === 0 ? '' : pct <= 0.25 ? ' l1' : pct <= 0.5 ? ' l2' : pct <= 0.75 ? ' l3' : ' l4';
-    cell.className = 'heatmap-cell' + level + (isFuture ? ' future' : '') + (isToday ? ' today' : '');
-    cell.title = `${d} · ${count} habit${count !== 1 ? 's' : ''}`;
-    if(count > 0 && !isFuture) activeDays++;
-
-    grid.appendChild(cell);
-  }
-  document.getElementById('heatmap-active').textContent = activeDays;
-}
-
 // ==================== MENTOR BRIEF EXPORT ====================
 // Builds a markdown journal of all dashboard inputs and downloads it locally.
 // Reads runtime state only — nothing is sent to GitHub or any server.
@@ -6541,7 +6600,6 @@ function renderAll(){
   renderNwChart();
   renderWeight();
   renderHabits();
-  renderHeatmap();
   renderTodos();
   renderTraining();
   renderShadow();
