@@ -327,37 +327,54 @@
   .nw-split-cell .v{font-size:26px;font-weight:800;letter-spacing:-0.03em;line-height:1}
 
   /* ==================== NET WORTH CHART ==================== */
-  .nw-chart-range{display:flex;border:1px solid var(--line-strong);border-radius:999px;padding:3px;gap:2px;background:var(--surface-2)}
-  .nw-chart-range button{
-    background:transparent;border:none;color:var(--ink-dim);padding:6px 12px;cursor:pointer;
-    font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.06em;
-    border-radius:999px;transition:all 0.2s ease;
+  .nw-chart-toolbar{
+    display:flex;justify-content:space-between;align-items:flex-end;gap:14px;
+    margin-top:22px;flex-wrap:wrap;
   }
+  .nw-chart-readout{display:flex;flex-direction:column;gap:3px;min-height:36px;justify-content:flex-end}
+  .nw-chart-readout-val{
+    font-family:'Inter',sans-serif;font-size:16px;font-weight:800;color:var(--ink);letter-spacing:-0.02em;line-height:1;
+  }
+  .nw-chart-readout-meta{
+    font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.04em;color:var(--ink-dim);
+  }
+  .nw-chart-readout-meta .up{color:var(--green)}
+  .nw-chart-readout-meta .down{color:var(--red)}
+  .nw-chart-range{display:flex;border:1px solid var(--line-strong);border-radius:999px;padding:3px;gap:2px;background:var(--surface-2);flex-shrink:0}
+  .nw-chart-range button{
+    background:transparent;border:none;color:var(--ink-dim);padding:6px 13px;cursor:pointer;
+    font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.06em;
+    border-radius:999px;transition:all 0.18s ease;
+  }
+  .nw-chart-range button:hover{color:var(--ink)}
   .nw-chart-range button.active{background:var(--ink);color:#fff}
+  .nw-chart-range button:disabled{opacity:0.3;cursor:default}
 
   .nw-chart{
-    position:relative;margin-top:24px;margin-bottom:8px;
-    background:transparent;
-    border-radius:12px;padding:16px 8px 8px;
+    position:relative;margin-top:12px;margin-bottom:6px;height:248px;touch-action:none;
   }
-  .nw-chart svg{width:100%;height:auto;display:block;overflow:visible}
-  .nw-grid-lines line{stroke:var(--line);stroke-width:1;stroke-dasharray:2 3}
+  .nw-chart svg{width:100%;height:100%;display:block;overflow:visible;cursor:crosshair}
+  .nw-grid-lines line{stroke:var(--line);stroke-width:1;stroke-dasharray:2 4}
   .nw-y-label{
     fill:var(--ink-faint);font-family:'JetBrains Mono',monospace;font-size:10px;
     font-weight:500;letter-spacing:0.04em;
   }
+  .nw-crosshair{stroke:var(--ink-faint);stroke-width:1;stroke-dasharray:3 3;opacity:0.55;pointer-events:none}
+  .nw-active-dot{fill:#fff;stroke:var(--blue);stroke-width:2.5;pointer-events:none}
+  .nw-last-dot{fill:var(--blue);stroke:#fff;stroke-width:2;pointer-events:none}
   .nw-chart-axis{
-    display:flex;justify-content:space-between;padding:8px 2.5% 0 7%;
+    display:flex;justify-content:space-between;padding:6px 16px 0 52px;
     font-family:'JetBrains Mono',monospace;font-size:9.5px;
     color:var(--ink-faint);letter-spacing:0.08em;font-weight:500;
   }
-  .nw-chart-dot{fill:var(--blue);stroke:#fff;stroke-width:2;transition:r 0.15s ease;cursor:pointer}
-  .nw-chart-dot:hover{r:6}
-  .nw-chart-dot-label{
-    fill:var(--ink);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;
-    opacity:0;transition:opacity 0.15s ease;
+  .nw-chart-tooltip{
+    position:absolute;pointer-events:none;z-index:10;
+    background:var(--ink);color:#fff;border-radius:9px;padding:7px 11px;
+    transform:translate(-50%,calc(-100% - 14px));white-space:nowrap;
+    box-shadow:0 10px 24px -10px rgba(10,23,51,0.55);
   }
-  .nw-chart-dot-group:hover .nw-chart-dot-label{opacity:1}
+  .nw-chart-tooltip .v{font-family:'Inter',sans-serif;font-size:13px;font-weight:800;letter-spacing:-0.02em;display:block}
+  .nw-chart-tooltip .d{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;letter-spacing:0.06em;color:rgba(255,255,255,0.62);margin-top:2px}
 
   .nw-chart-empty{
     position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -854,8 +871,7 @@
     .list-card{padding:16px}
 
     /* Finance */
-    .nw-chart{height:200px;padding:12px 4px 4px}
-    .nw-chart svg{height:160px}
+    .nw-chart{height:200px}
     .nw-head{flex-direction:column;align-items:stretch}
     .nw-chart-range{align-self:flex-start}
     .nw-snapshot-row{flex-direction:column;align-items:stretch;gap:10px}
@@ -2316,25 +2332,40 @@
       </div>
 
       <!-- Net Worth History Chart -->
+      <div class="nw-chart-toolbar">
+        <div class="nw-chart-readout" id="nw-chart-readout">
+          <span class="nw-chart-readout-val" id="nw-chart-readout-val">—</span>
+          <span class="nw-chart-readout-meta" id="nw-chart-readout-meta"></span>
+        </div>
+        <div class="nw-chart-range" id="nw-range">
+          <button data-range="3m">3M</button>
+          <button data-range="6m">6M</button>
+          <button data-range="1y">1A</button>
+          <button data-range="all" class="active">Tout</button>
+        </div>
+      </div>
       <div class="nw-chart">
-        <svg id="nw-chart-svg" viewBox="0 0 800 220">
+        <svg id="nw-chart-svg" viewBox="0 0 800 248" preserveAspectRatio="none">
           <defs>
             <linearGradient id="nwg" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stop-color="#1554ff" stop-opacity="0.28"/>
+              <stop offset="0%" stop-color="#1554ff" stop-opacity="0.22"/>
               <stop offset="100%" stop-color="#1554ff" stop-opacity="0"/>
             </linearGradient>
           </defs>
           <g class="nw-grid-lines" id="nw-grid-lines"></g>
           <path id="nw-chart-fill" d="" fill="url(#nwg)"/>
-          <path id="nw-chart-line" d="" fill="none" stroke="#1554ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <g id="nw-chart-dots"></g>
+          <path id="nw-chart-line" d="" fill="none" stroke="#1554ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line id="nw-crosshair" class="nw-crosshair" x1="0" y1="0" x2="0" y2="0" style="display:none"/>
+          <circle id="nw-active-dot" class="nw-active-dot" r="0" style="display:none"/>
+          <circle id="nw-last-dot" class="nw-last-dot" r="4" style="display:none"/>
         </svg>
-        <div class="nw-chart-axis" id="nw-chart-axis"></div>
+        <div class="nw-chart-tooltip" id="nw-chart-tooltip" style="display:none"></div>
         <div class="nw-chart-empty" id="nw-chart-empty">
           <div>No history yet</div>
           <div class="hint">Save a snapshot to start tracking evolution</div>
         </div>
       </div>
+      <div class="nw-chart-axis" id="nw-chart-axis"></div>
 
       <div class="nw-snapshot-row">
         <div class="nw-snapshot-info">
@@ -3035,7 +3066,7 @@ let state = {
   accounts: [],
   fx: { rate: 1.08, fetchedAt: null },
   nwHistory: [],
-  chartRange: '30',
+  chartRange: 'all',
   activeView: 'dashboard',
   weight: { current: null, history: [] },
   manifesto: null,
@@ -3086,10 +3117,10 @@ async function init(){
   setInterval(updateClock, 1000);
   updateClock();
 
-  // Sync chart range UI with saved state
-  const activeRange = state.chartRange || '30';
+  // Sync chart range UI with saved state (normalise legacy values to a valid range)
+  if(!['3m','6m','1y','all'].includes(state.chartRange)) state.chartRange = 'all';
   document.querySelectorAll('#nw-range button').forEach(b => {
-    b.classList.toggle('active', b.dataset.range === activeRange);
+    b.classList.toggle('active', b.dataset.range === state.chartRange);
   });
 
   // Sync currency toggle with saved state
@@ -3759,122 +3790,225 @@ document.getElementById('weight-input').addEventListener('change', e => {
 });
 
 // ==================== NET WORTH HISTORY CHART ====================
+// Interactive, finance-grade line chart. The SVG viewBox is mapped 1:1 to its
+// pixel size (set on each render) so the line and labels never distort.
+let nwChartData = null;
+
+function nwValueOf(h){
+  return state.currency === 'EUR'
+    ? (h.totalEur !== undefined ? h.totalEur : h.total)
+    : (h.totalUsd !== undefined ? h.totalUsd : h.total);
+}
+function nwSym(){ return state.currency === 'EUR' ? '€' : '$'; }
+function nwFmtMoney(v){ return nwSym() + new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(Math.round(v)); }
+function nwFmtCompact(v){
+  const abs = Math.abs(v); let n;
+  if(abs >= 1e6) n = (v/1e6).toFixed(abs >= 1e7 ? 0 : 1).replace(/\.0$/,'') + 'M';
+  else if(abs >= 1e3) n = (v/1e3).toFixed(abs >= 1e4 ? 0 : 1).replace(/\.0$/,'') + 'k';
+  else n = Math.round(v).toString();
+  return nwSym() + n;
+}
+function nwRangeCutoff(range){
+  if(range === 'all') return null;
+  const d = new Date();
+  if(range === '3m') d.setMonth(d.getMonth() - 3);
+  else if(range === '6m') d.setMonth(d.getMonth() - 6);
+  else if(range === '1y') d.setFullYear(d.getFullYear() - 1);
+  else return null;
+  return d;
+}
+
 function renderNwChart(){
   const svg = document.getElementById('nw-chart-svg');
   const line = document.getElementById('nw-chart-line');
   const fill = document.getElementById('nw-chart-fill');
-  const dots = document.getElementById('nw-chart-dots');
   const axis = document.getElementById('nw-chart-axis');
   const empty = document.getElementById('nw-chart-empty');
   const gridLines = document.getElementById('nw-grid-lines');
   const snapInfo = document.getElementById('nw-snap-info');
+  const lastDot = document.getElementById('nw-last-dot');
+  if(!svg || !line || !fill) return;
+  // Skip while hidden (no width to measure); re-runs on view switch / resize.
+  const measuredW = svg.clientWidth || svg.getBoundingClientRect().width;
+  if(!measuredW) return;
 
-  const history = state.nwHistory || [];
-  
-  // Filter by range
-  let filtered = history.slice();
-  // Sort chronologically
-  filtered.sort((a,b) => new Date(a.date) - new Date(b.date));
+  const history = (state.nwHistory || []).slice().sort((a,b) => new Date(a.date) - new Date(b.date));
 
-  // Convert to display currency
-  const sym = state.currency === 'EUR' ? '€' : '$';
-  const rate = (state.fx && state.fx.rate) ? state.fx.rate : 1.08;
-  const values = filtered.map(h => {
-    if(state.currency === 'EUR') return h.totalEur !== undefined ? h.totalEur : h.total;
-    else return h.totalUsd !== undefined ? h.totalUsd : h.total;
-  });
-
-  // Update info
-  if(history.length === 0){
-    snapInfo.textContent = 'No snapshots yet · Click to save your first';
-  } else {
-    const last = history[history.length-1];
-    const lastDate = new Date(last.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-    snapInfo.textContent = `${history.length} snapshot${history.length>1?'s':''} · Last: ${lastDate}`;
+  if(snapInfo){
+    if(history.length === 0){
+      snapInfo.textContent = 'No snapshots yet · Click to save your first';
+    } else {
+      const lastDate = new Date(history[history.length-1].date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+      snapInfo.textContent = `${history.length} snapshot${history.length>1?'s':''} · Last: ${lastDate}`;
+    }
   }
 
-  // Empty state
+  // Range filter + reflect availability on the selector buttons.
+  const range = ['3m','6m','1y','all'].includes(state.chartRange) ? state.chartRange : 'all';
+  document.querySelectorAll('#nw-range button').forEach(b => {
+    const cut = nwRangeCutoff(b.dataset.range);
+    const count = cut ? history.filter(h => new Date(h.date) >= cut).length : history.length;
+    b.disabled = (b.dataset.range !== 'all') && count < 2;
+    b.classList.toggle('active', b.dataset.range === range);
+  });
+  const cutoff = nwRangeCutoff(range);
+  const filtered = cutoff ? history.filter(h => new Date(h.date) >= cutoff) : history.slice();
+
   if(filtered.length < 2){
-    empty.classList.remove('hidden');
-    line.setAttribute('d','');
-    fill.setAttribute('d','');
-    dots.innerHTML = '';
-    gridLines.innerHTML = '';
-    axis.innerHTML = '';
-    // If exactly 1, show it as a dot in the middle
-    if(filtered.length === 1){
-      empty.innerHTML = `<div>Only one snapshot</div><div class="hint">Add more to see evolution over time</div>`;
-    } else {
-      empty.innerHTML = `<div>No history yet</div><div class="hint">Save a snapshot to start tracking evolution</div>`;
+    nwChartData = null;
+    line.setAttribute('d',''); fill.setAttribute('d','');
+    if(gridLines) gridLines.innerHTML = '';
+    if(axis) axis.innerHTML = '';
+    if(lastDot) lastDot.style.display = 'none';
+    nwHidePoint();
+    if(empty){
+      empty.classList.remove('hidden');
+      empty.innerHTML = history.length < 2
+        ? `<div>No history yet</div><div class="hint">Save a snapshot to start tracking evolution</div>`
+        : `<div>Pas assez de snapshots</div><div class="hint">sur cette période · élargissez la plage</div>`;
     }
+    nwUpdateReadout(null);
     return;
   }
-  empty.classList.add('hidden');
+  if(empty) empty.classList.add('hidden');
 
-  // Compute chart dimensions
-  const W = 800, H = 200, padL = 56, padR = 20, padY = 20;
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const range_v = max - min || Math.max(1, Math.abs(max) * 0.1);
-  const yMin = min - range_v * 0.1;
-  const yMax = max + range_v * 0.1;
-  const scaleY = v => H - padY - ((v - yMin) / (yMax - yMin)) * (H - padY * 2);
+  const values = filtered.map(nwValueOf);
+
+  // 1 user unit = 1 px → crisp text, round dots, no stretching.
+  const W = Math.max(320, Math.round(measuredW));
+  const H = Math.round(svg.clientHeight || svg.getBoundingClientRect().height || 248);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const padL = 52, padR = 16, padT = 16, padB = 16;
+
+  const min = Math.min(...values), max = Math.max(...values);
+  const rangeV = (max - min) || Math.max(1, Math.abs(max) * 0.08);
+  const yMin = min - rangeV * 0.12, yMax = max + rangeV * 0.12;
+  const scaleY = v => H - padB - ((v - yMin) / (yMax - yMin)) * (H - padT - padB);
   const scaleX = i => padL + (i / (filtered.length - 1)) * (W - padL - padR);
-
   const pts = filtered.map((h, i) => [scaleX(i), scaleY(values[i])]);
 
-  // Line path
-  const d = 'M' + pts.map(p => p.map(n => n.toFixed(1)).join(',')).join(' L');
+  const d = 'M' + pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L');
   line.setAttribute('d', d);
-  fill.setAttribute('d', d + ` L${pts[pts.length-1][0].toFixed(1)},${H} L${pts[0][0].toFixed(1)},${H} Z`);
+  fill.setAttribute('d', d + ` L${pts[pts.length-1][0].toFixed(1)},${(H-padB).toFixed(1)} L${pts[0][0].toFixed(1)},${(H-padB).toFixed(1)} Z`);
 
-  // Y-axis ticks: grid lines + value labels
-  const formatYTick = v => {
-    const abs = Math.abs(v);
-    let n;
-    if(abs >= 1e6) n = (v/1e6).toFixed(abs >= 1e7 ? 0 : 1).replace(/\.0$/,'') + 'M';
-    else if(abs >= 1e3) n = (v/1e3).toFixed(abs >= 1e4 ? 0 : 1).replace(/\.0$/,'') + 'k';
-    else n = Math.round(v).toString();
-    return sym + n;
-  };
-  gridLines.innerHTML = '';
-  const tickCount = 4;
-  for(let i=0;i<=tickCount;i++){
-    const v = yMin + (yMax - yMin) * (i / tickCount);
-    const y = scaleY(v);
-    if(i > 0 && i < tickCount){
-      gridLines.innerHTML += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}"/>`;
+  if(gridLines){
+    let g = '';
+    const ticks = 4;
+    for(let i=0;i<=ticks;i++){
+      const v = yMin + (yMax - yMin) * (i / ticks);
+      const y = scaleY(v);
+      g += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}"/>`;
+      g += `<text class="nw-y-label" x="${padL-10}" y="${(y+3.5).toFixed(1)}" text-anchor="end">${nwFmtCompact(v)}</text>`;
     }
-    gridLines.innerHTML += `<text class="nw-y-label" x="${(padL-8).toFixed(1)}" y="${(y+3.5).toFixed(1)}" text-anchor="end">${formatYTick(v)}</text>`;
+    gridLines.innerHTML = g;
   }
 
-  // Dots with tooltips
-  dots.innerHTML = '';
-  filtered.forEach((h, i) => {
-    const [x, y] = pts[i];
-    const v = values[i];
-    const dateStr = new Date(h.date).toLocaleDateString('en-US',{month:'short',day:'numeric'});
-    const valStr = sym + new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(v);
-    dots.innerHTML += `
-      <g class="nw-chart-dot-group">
-        <circle class="nw-chart-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${i===filtered.length-1?5:3}">
-          <title>${dateStr} · ${valStr}</title>
-        </circle>
-        <text class="nw-chart-dot-label" x="${x.toFixed(1)}" y="${(y-12).toFixed(1)}" text-anchor="middle">${valStr}</text>
-      </g>
-    `;
-  });
+  if(lastDot){
+    lastDot.style.display = '';
+    lastDot.setAttribute('cx', pts[pts.length-1][0].toFixed(1));
+    lastDot.setAttribute('cy', pts[pts.length-1][1].toFixed(1));
+  }
 
-  // Axis labels (show ~4-5 dates evenly)
-  axis.innerHTML = '';
-  const labelCount = Math.min(5, filtered.length);
-  for(let i=0;i<labelCount;i++){
-    const idx = Math.round(i * (filtered.length-1) / (labelCount-1));
-    const date = new Date(filtered[idx].date);
-    const label = date.toLocaleDateString('en-US',{month:'short',day:'numeric'}).toUpperCase();
-    axis.innerHTML += `<span>${label}</span>`;
+  if(axis){
+    const n = Math.min(5, filtered.length);
+    let a = '';
+    for(let i=0;i<n;i++){
+      const idx = Math.round(i * (filtered.length-1) / (n-1));
+      const dt = new Date(filtered[idx].date);
+      a += `<span>${dt.toLocaleDateString('fr-FR',{month:'short',day:'numeric'}).toUpperCase()}</span>`;
+    }
+    axis.innerHTML = a;
+  }
+
+  nwChartData = { W, H, padT, padB, pts, filtered };
+  nwHidePoint();
+}
+
+// Live readout (top-left of the chart). idx=null → rest state: latest value +
+// the gain/loss over the visible range. Otherwise → the hovered point.
+function nwUpdateReadout(idx){
+  const valEl = document.getElementById('nw-chart-readout-val');
+  const metaEl = document.getElementById('nw-chart-readout-meta');
+  if(!valEl || !metaEl) return;
+  const filtered = nwChartData ? nwChartData.filtered : null;
+  if(!filtered || filtered.length === 0){ valEl.textContent = '—'; metaEl.textContent = ''; return; }
+  if(idx == null){
+    const first = nwValueOf(filtered[0]), last = nwValueOf(filtered[filtered.length-1]);
+    const delta = last - first;
+    const pct = first !== 0 ? (delta / Math.abs(first)) * 100 : 0;
+    valEl.textContent = nwFmtMoney(last);
+    const cls = delta >= 0 ? 'up' : 'down';
+    const arrow = delta >= 0 ? '▲' : '▼';
+    const rl = {'3m':'3 mois','6m':'6 mois','1y':'1 an','all':'historique'}[state.chartRange] || 'historique';
+    metaEl.innerHTML = `<span class="${cls}">${arrow} ${nwFmtMoney(Math.abs(delta))} (${delta>=0?'+':'-'}${Math.abs(pct).toFixed(1)}%)</span> · ${rl}`;
+  } else {
+    const h = filtered[idx];
+    valEl.textContent = nwFmtMoney(nwValueOf(h));
+    metaEl.textContent = new Date(h.date).toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
   }
 }
+
+function nwShowPoint(i){
+  if(!nwChartData) return;
+  const { pts, padT, padB, H, W, filtered } = nwChartData;
+  const [x, y] = pts[i];
+  const cross = document.getElementById('nw-crosshair');
+  const dot = document.getElementById('nw-active-dot');
+  const tip = document.getElementById('nw-chart-tooltip');
+  if(cross){ cross.style.display=''; cross.setAttribute('x1',x.toFixed(1)); cross.setAttribute('x2',x.toFixed(1)); cross.setAttribute('y1',padT); cross.setAttribute('y2',(H-padB).toFixed(1)); }
+  if(dot){ dot.style.display=''; dot.setAttribute('cx',x.toFixed(1)); dot.setAttribute('cy',y.toFixed(1)); dot.setAttribute('r','5'); }
+  if(tip){
+    const svg = document.getElementById('nw-chart-svg');
+    const rect = svg.getBoundingClientRect();
+    const scale = rect.width / W;
+    const h = filtered[i];
+    tip.style.display = '';
+    tip.innerHTML = `<span class="v">${nwFmtMoney(nwValueOf(h))}</span><span class="d">${new Date(h.date).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'})}</span>`;
+    const leftPx = Math.max(56, Math.min(rect.width - 56, x * scale));
+    tip.style.left = leftPx + 'px';
+    tip.style.top = (y * scale) + 'px';
+  }
+  nwUpdateReadout(i);
+}
+
+function nwHidePoint(){
+  const cross = document.getElementById('nw-crosshair');
+  const dot = document.getElementById('nw-active-dot');
+  const tip = document.getElementById('nw-chart-tooltip');
+  if(cross) cross.style.display = 'none';
+  if(dot) dot.style.display = 'none';
+  if(tip) tip.style.display = 'none';
+  nwUpdateReadout(null);
+}
+
+// Crosshair: snap to the nearest snapshot under the cursor.
+(function wireNwChartPointer(){
+  const svg = document.getElementById('nw-chart-svg');
+  if(!svg) return;
+  const move = e => {
+    if(!nwChartData) return;
+    const rect = svg.getBoundingClientRect();
+    const xUser = (e.clientX - rect.left) * (nwChartData.W / rect.width);
+    let nearest = 0, best = Infinity;
+    nwChartData.pts.forEach((p,i) => { const dd = Math.abs(p[0]-xUser); if(dd < best){ best = dd; nearest = i; } });
+    nwShowPoint(nearest);
+  };
+  svg.addEventListener('pointermove', move);
+  svg.addEventListener('pointerdown', move);
+  svg.addEventListener('pointerleave', nwHidePoint);
+})();
+
+// Keep the chart sharp when the card width changes.
+(function observeNwChartResize(){
+  const svg = document.getElementById('nw-chart-svg');
+  if(!svg || typeof ResizeObserver === 'undefined') return;
+  let raf = null;
+  const ro = new ResizeObserver(() => {
+    if(raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => { if(svg.clientWidth) renderNwChart(); });
+  });
+  ro.observe(svg);
+})();
 
 // Snapshot button
 document.getElementById('nw-snapshot-btn').addEventListener('click', () => {
