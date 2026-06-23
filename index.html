@@ -84,6 +84,9 @@
   .pill-btn.blue{background:var(--blue);color:#fff;border-color:var(--blue)}
   .pill-btn.blue:hover{background:var(--blue-dark)}
   .pill-btn .status-dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+  .stat-pill{gap:7px}
+  .stat-pill .stat-k{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;color:var(--ink-faint);font-weight:600}
+  .stat-pill .stat-v{font-weight:800;color:var(--ink);letter-spacing:-0.01em;font-size:12px}
 
   /* ==================== MANIFESTO HERO ==================== */
   .manifesto{
@@ -210,6 +213,9 @@
   .card:nth-child(5){animation-delay:0.36s}
   .card:nth-child(6){animation-delay:0.42s}
   .card:nth-child(7){animation-delay:0.48s}
+  /* Entrance plays once on first load; never re-runs on tab switches. */
+  body.loaded .card,
+  body.loaded .manifesto{animation:none;opacity:1;transform:none}
 
   .card-blue{background:var(--blue);color:#fff;border-color:var(--blue)}
   .card-navy{background:var(--navy);color:#fff;border-color:var(--navy)}
@@ -422,13 +428,14 @@
   .weight-delta.good{background:rgba(24,178,107,0.12);color:var(--green)}
   .weight-delta.bad{background:rgba(229,56,59,0.12);color:var(--red)}
   .weight-spark{height:60px;width:160px}
-  .weight-layout{display:flex;gap:28px;align-items:center;flex-wrap:wrap;position:relative;z-index:1}
-  .weight-now{flex-shrink:0}
-  .weight-chart-wrap{flex:1;min-width:260px;position:relative}
+  .weight-layout{display:flex;flex-direction:column;gap:16px;position:relative;z-index:1}
+  .weight-now{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .weight-now .weight-delta{margin-top:0}
+  .weight-chart-wrap{position:relative;min-width:0}
   .weight-chart{width:100%;height:auto;display:block;overflow:visible}
-  .weight-grid-line{stroke:var(--line);stroke-width:1}
-  .weight-grid-label{fill:var(--ink-faint);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600}
-  .weight-x-label{fill:var(--ink-dim);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600}
+  .weight-grid-line{stroke:var(--line);stroke-width:1;stroke-dasharray:2 4}
+  .weight-grid-label{fill:var(--ink-faint);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.04em}
+  .weight-x-label{fill:var(--ink-faint);font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:500;letter-spacing:0.08em}
   .weight-dot-pt{fill:#fff;stroke:#1554ff;stroke-width:2}
   .weight-dot-pt.last{fill:#1554ff}
   .weight-chart-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;color:var(--ink-faint);font-weight:600;padding:0 20px}
@@ -556,11 +563,6 @@
   .habit-today-badge.beta{background:rgba(21,84,255,0.12);color:var(--blue)}
   .habit-today-badge.perm{background:var(--navy);color:#fff}
   .habit-today-row.done .habit-today-badge.beta{background:rgba(21,84,255,0.2)}
-  .habit-today-streak{
-    font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-dim);
-    font-weight:600;letter-spacing:0.04em;
-  }
-  .habit-today-streak.hot{color:var(--amber);font-weight:700}
   .habit-today-name-input{
     background:transparent;border:none;padding:0;outline:none;width:100%;
     font-family:'Inter',sans-serif;font-size:15px;font-weight:700;color:var(--ink);
@@ -568,12 +570,12 @@
   }
 
   .habit-today-streak-num{
-    font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;
-    color:var(--blue);padding:5px 10px;background:var(--blue-soft);border-radius:8px;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:800;
+    color:var(--blue);padding:5px 11px;background:var(--blue-soft);border-radius:999px;
     letter-spacing:0.02em;min-width:42px;text-align:center;
   }
   .habit-today-streak-num.cold{color:var(--ink-faint);background:var(--surface-2)}
-  .habit-today-streak-num.fire{color:#c7541f;background:rgba(245,166,35,0.15)}
+  .habit-today-streak-num.fire{color:#fff;background:var(--blue)}
 
   .habit-today-actions{
     display:flex;align-items:center;gap:4px;opacity:0;transition:opacity 0.15s ease;
@@ -1129,7 +1131,7 @@
   /* Manifesto */
   .shadow-manifesto{
     position:relative;padding:20px 24px;margin-bottom:20px;
-    background:#1a1f2e;
+    background:linear-gradient(135deg, #0a1733 0%, #16213f 100%);
     border-radius:12px;color:#fff;overflow:hidden;
   }
   .shadow-manifesto-kicker{
@@ -2265,8 +2267,6 @@
   .view-tab:hover svg{opacity:1}
   .view-tab.active{background:var(--ink);color:#fff}
   .view-tab.active svg{opacity:1}
-  .view-tab[data-view="finance"].active{background:var(--blue)}
-  .view-tab[data-view="growth"].active{background:var(--navy);color:#fff}
 
   .view{animation:viewfade 0.35s cubic-bezier(.2,.8,.2,1)}
   @keyframes viewfade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -2301,8 +2301,8 @@
         </button>
       </div>
       <button class="pill-btn cloud-status cloud-offline" id="cloud-status" title="Cloud sync status · click for options">Offline</button>
-      <button class="pill-btn"><em id="stat-age" style="font-style:normal;color:var(--blue);font-weight:800">—</em> <span style="color:var(--ink-faint);margin:0 4px">·</span> <span style="font-size:10px;color:var(--ink-dim)">age</span></button>
-      <button class="pill-btn"><em id="stat-day-ratio" style="font-style:normal;color:var(--blue);font-weight:800">—</em> <span style="color:var(--ink-faint);margin:0 4px">·</span> <span style="font-size:10px;color:var(--ink-dim)">jour</span></button>
+      <button class="pill-btn stat-pill" title="Your age"><span class="stat-k">AGE</span><span class="stat-v" id="stat-age">—</span></button>
+      <button class="pill-btn stat-pill" title="Day of the year"><span class="stat-k">YEAR</span><span class="stat-v" id="stat-day-ratio">—</span></button>
     </div>
   </div>
 
@@ -2313,7 +2313,7 @@
     <!-- 01 NET WORTH -->
     <div class="card networth span-12">
       <div class="label">
-        <span class="label-text">01 · Net Worth</span>
+        <span class="label-text">Net Worth</span>
         <div class="fx-indicator">
           <span>1 € = <span class="rate" id="fx-rate">—</span> $</span>
           <button class="refresh" id="fx-refresh" title="Refresh rate">↻</button>
@@ -2340,8 +2340,8 @@
         <div class="nw-chart-range" id="nw-range">
           <button data-range="3m">3M</button>
           <button data-range="6m">6M</button>
-          <button data-range="1y">1A</button>
-          <button data-range="all" class="active">Tout</button>
+          <button data-range="1y">1Y</button>
+          <button data-range="all" class="active">All</button>
         </div>
       </div>
       <div class="nw-chart">
@@ -2448,18 +2448,18 @@
 
       <div class="habits-discipline-wrap" id="habits-history-wrap">
         <div class="habits-discipline-head">
-          <span class="habits-discipline-title">Discipline · 30 derniers jours</span>
+          <span class="habits-discipline-title">Discipline · last 30 days</span>
           <span class="habits-discipline-stats">
-            <span class="hd-streak" id="hd-streak">0</span><span>j de série</span>
+            <span class="hd-streak" id="hd-streak">0</span><span>day streak</span>
             <span class="hd-sep">·</span>
-            <span class="hd-rate" id="hd-rate">—</span><span>assidu</span>
+            <span class="hd-rate" id="hd-rate">—</span><span>consistency</span>
           </span>
         </div>
         <div class="habits-discipline-grid" id="habits-discipline-grid"></div>
         <div class="habits-discipline-legend">
-          <span>Moins</span>
+          <span>Less</span>
           <span class="hd-legend-cells"><i class="hd-cell l1"></i><i class="hd-cell l2"></i><i class="hd-cell l3"></i><i class="hd-cell l4"></i></span>
-          <span>Plus</span>
+          <span>More</span>
         </div>
       </div>
 
@@ -2481,7 +2481,7 @@
     <!-- S1 THE SHADOW (addiction tracker) -->
     <div class="card shadow-card span-12">
       <div class="label">
-        <span class="label-text">S1 · The Shadow</span>
+        <span class="label-text">The Shadow</span>
         <span class="label-tag"><span id="shadow-counter-num" style="font-weight:800">—</span> <span id="shadow-counter-unit">days clean</span></span>
       </div>
       <div class="shadow-manifesto">
@@ -2495,9 +2495,9 @@
     </div>
 
     <!-- S2 WEIGHT -->
-    <div class="card span-12">
+    <div class="card span-6">
       <div class="label">
-        <span class="label-text">S2 · Weight</span>
+        <span class="label-text">Weight</span>
         <span class="label-tag" id="weight-date">Today</span>
       </div>
       <div class="weight-layout">
@@ -2521,15 +2521,15 @@
             <path id="weight-path" d="" fill="none" stroke="#1554ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             <g id="weight-dots"></g>
           </svg>
-          <div class="weight-chart-empty" id="weight-chart-empty">Saisissez au moins 2 pesées pour voir la courbe</div>
+          <div class="weight-chart-empty" id="weight-chart-empty">Log at least 2 weigh-ins to see the trend</div>
         </div>
       </div>
     </div>
 
     <!-- S3 TRAINING -->
-    <div class="card training span-12" id="training-card">
+    <div class="card training span-6" id="training-card">
       <div class="label">
-        <span class="label-text">S3 · Training</span>
+        <span class="label-text">Training</span>
         <div style="display:flex;align-items:center;gap:12px">
           <span class="label-tag"><span class="dot" style="background:var(--blue)"></span> My routine</span>
           <button class="pill-btn" id="training-edit-btn" style="height:32px;padding:0 14px;font-size:11px">
@@ -2541,16 +2541,16 @@
       <div class="training-today-check" id="training-today-check">
         <div class="training-today-info">
           <div class="training-today-day" id="training-today-day">—</div>
-          <div class="training-today-sub">Séance libre · n'importe quel jour</div>
+          <div class="training-today-sub">Free session · log any day</div>
         </div>
         <button class="training-today-btn" id="training-today-btn" type="button">
           <span class="training-today-box" id="training-today-box"></span>
-          <span class="training-today-text" id="training-today-text">J'ai été m'entraîner</span>
+          <span class="training-today-text" id="training-today-text">I trained today</span>
         </button>
       </div>
       <div class="training-regularity" id="training-regularity">
         <div class="training-reg-head">
-          <span class="training-reg-title">Séances · 12 dernières semaines</span>
+          <span class="training-reg-title">Sessions · last 12 weeks</span>
           <span class="training-reg-stat" id="training-reg-stat">—</span>
         </div>
         <div class="training-reg-grid" id="training-reg-grid"></div>
@@ -3449,7 +3449,7 @@ function updateClock(){
   const totalDays = isLeap ? 366 : 365;
   const daysLeft = totalDays - dayOfYear;
   const ratioEl = document.getElementById('stat-day-ratio');
-  if(ratioEl) ratioEl.textContent = dayOfYear + '/' + daysLeft;
+  if(ratioEl) ratioEl.textContent = dayOfYear + '/' + totalDays;
 
   // Compute exact age: years + days since last birthday
   let years = d.getFullYear() - BIRTHDAY.getFullYear();
@@ -3460,7 +3460,7 @@ function updateClock(){
   }
   const daysSinceBirthday = Math.floor((d - lastBirthday) / (1000*60*60*24));
   const ageEl = document.getElementById('stat-age');
-  if(ageEl) ageEl.innerHTML = `${years}<span style="font-size:0.6em;color:var(--ink-dim);font-style:normal;margin:0 4px">·</span>${daysSinceBirthday}`;
+  if(ageEl) ageEl.textContent = `${years}y ${daysSinceBirthday}d`;
 }
 
 // ==================== VIEW SWITCHING ====================
@@ -3596,7 +3596,7 @@ function renderNetWorth(){
       </div>
       <button class="liquid-toggle ${acc.liquid?'liquid':'invested'}" data-liquid="${acc.id}">${acc.liquid?'Liquid':'Invested'}</button>
       <div style="display:flex;align-items:center;gap:6px">
-        <input type="number" class="amt-input" value="${acc.amount||''}" placeholder="0" data-id="${acc.id}" data-field="amount" step="0.01">
+        <input type="text" inputmode="decimal" class="amt-input" value="${acc.amount ? fmtAmt(acc.amount) : ''}" placeholder="0" data-id="${acc.id}" data-field="amount">
         <button class="cur-switch ${accCur==='EUR'?'eur':'usd'}" data-cur-switch="${acc.id}" title="Switch currency">${accSym}</button>
       </div>
       <button class="btn-icon" data-del="${acc.id}" title="Delete">×</button>
@@ -3610,10 +3610,21 @@ function renderNetWorth(){
     inp.addEventListener('input', e => {
       const acc = state.accounts.find(a => a.id === e.target.dataset.id);
       if(!acc) return;
-      if(e.target.dataset.field === 'amount') acc.amount = parseFloat(e.target.value) || 0;
+      if(e.target.dataset.field === 'amount') acc.amount = parseFloat(e.target.value.replace(/[,\s]/g,'')) || 0;
       else acc[e.target.dataset.field] = e.target.value;
       save();
       renderNetWorthTotals();
+    });
+  });
+  // Amount fields: raw number while editing, thousands-separated at rest.
+  list.querySelectorAll('.amt-input').forEach(inp => {
+    inp.addEventListener('focus', e => {
+      const acc = state.accounts.find(a => a.id === e.target.dataset.id);
+      if(acc) e.target.value = acc.amount ? String(acc.amount) : '';
+    });
+    inp.addEventListener('blur', e => {
+      const acc = state.accounts.find(a => a.id === e.target.dataset.id);
+      if(acc) e.target.value = acc.amount ? fmtAmt(acc.amount) : '';
     });
   });
   list.querySelectorAll('[data-liquid]').forEach(btn => {
@@ -3715,7 +3726,7 @@ function renderWeight(){
   if(deltaEl){
     if(h.length >= 2){
       const delta = h[h.length-1] - h[0];
-      deltaEl.textContent = (delta >= 0 ? '▲ +' : '▼ -') + Math.abs(delta).toFixed(1) + ' kg · ' + h.length + ' pesées';
+      deltaEl.textContent = (delta >= 0 ? '▲ +' : '▼ -') + Math.abs(delta).toFixed(1) + ' kg · ' + h.length + ' weigh-ins';
       deltaEl.className = 'weight-delta ' + (delta > 0.3 ? 'bad' : delta < -0.3 ? 'good' : '');
     } else {
       deltaEl.textContent = 'Track to see trend';
@@ -3747,7 +3758,7 @@ function renderWeight(){
   const lo = min - sp*0.15, hi = max + sp*0.15;
   const yFor = v => padT + (1 - (v-lo)/(hi-lo)) * plotH;
   const xFor = i => padL + (i/(h.length-1)) * plotW;
-  const fmtDay = d => d ? new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}) : '';
+  const fmtDay = d => d ? new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
 
   // Horizontal gridlines + y-axis labels (max / mid / min of actual weigh-ins)
   let gridHtml = [max, (max+min)/2, min].map(v => {
@@ -3768,7 +3779,7 @@ function renderWeight(){
 
   dots.innerHTML = pts.map((p,i) => {
     const isLast = i === pts.length-1;
-    const ds = hist[i].date ? new Date(hist[i].date).toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'}) : '';
+    const ds = hist[i].date ? new Date(hist[i].date).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) : '';
     return `<circle class="weight-dot-pt${isLast?' last':''}" cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${isLast?4.5:3.5}"><title>${ds} · ${h[i].toFixed(1)} kg</title></circle>`;
   }).join('');
 }
@@ -3800,7 +3811,8 @@ function nwValueOf(h){
     : (h.totalUsd !== undefined ? h.totalUsd : h.total);
 }
 function nwSym(){ return state.currency === 'EUR' ? '€' : '$'; }
-function nwFmtMoney(v){ return nwSym() + new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(Math.round(v)); }
+function fmtAmt(n){ return new Intl.NumberFormat('en-US',{maximumFractionDigits:2}).format(n); }
+function nwFmtMoney(v){ return nwSym() + new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(Math.round(v)); }
 function nwFmtCompact(v){
   const abs = Math.abs(v); let n;
   if(abs >= 1e6) n = (v/1e6).toFixed(abs >= 1e7 ? 0 : 1).replace(/\.0$/,'') + 'M';
@@ -3865,7 +3877,7 @@ function renderNwChart(){
       empty.classList.remove('hidden');
       empty.innerHTML = history.length < 2
         ? `<div>No history yet</div><div class="hint">Save a snapshot to start tracking evolution</div>`
-        : `<div>Pas assez de snapshots</div><div class="hint">sur cette période · élargissez la plage</div>`;
+        : `<div>Not enough snapshots</div><div class="hint">in this range · pick a wider period</div>`;
     }
     nwUpdateReadout(null);
     return;
@@ -3915,7 +3927,7 @@ function renderNwChart(){
     for(let i=0;i<n;i++){
       const idx = Math.round(i * (filtered.length-1) / (n-1));
       const dt = new Date(filtered[idx].date);
-      a += `<span>${dt.toLocaleDateString('fr-FR',{month:'short',day:'numeric'}).toUpperCase()}</span>`;
+      a += `<span>${dt.toLocaleDateString('en-US',{month:'short',day:'numeric'}).toUpperCase()}</span>`;
     }
     axis.innerHTML = a;
   }
@@ -3939,12 +3951,12 @@ function nwUpdateReadout(idx){
     valEl.textContent = nwFmtMoney(last);
     const cls = delta >= 0 ? 'up' : 'down';
     const arrow = delta >= 0 ? '▲' : '▼';
-    const rl = {'3m':'3 mois','6m':'6 mois','1y':'1 an','all':'historique'}[state.chartRange] || 'historique';
+    const rl = {'3m':'3 months','6m':'6 months','1y':'1 year','all':'all time'}[state.chartRange] || 'all time';
     metaEl.innerHTML = `<span class="${cls}">${arrow} ${nwFmtMoney(Math.abs(delta))} (${delta>=0?'+':'-'}${Math.abs(pct).toFixed(1)}%)</span> · ${rl}`;
   } else {
     const h = filtered[idx];
     valEl.textContent = nwFmtMoney(nwValueOf(h));
-    metaEl.textContent = new Date(h.date).toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
+    metaEl.textContent = new Date(h.date).toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'});
   }
 }
 
@@ -3963,7 +3975,7 @@ function nwShowPoint(i){
     const scale = rect.width / W;
     const h = filtered[i];
     tip.style.display = '';
-    tip.innerHTML = `<span class="v">${nwFmtMoney(nwValueOf(h))}</span><span class="d">${new Date(h.date).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'})}</span>`;
+    tip.innerHTML = `<span class="v">${nwFmtMoney(nwValueOf(h))}</span><span class="d">${new Date(h.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</span>`;
     const leftPx = Math.max(56, Math.min(rect.width - 56, x * scale));
     tip.style.left = leftPx + 'px';
     tip.style.top = (y * scale) + 'px';
@@ -4168,11 +4180,10 @@ function renderHabits(){
         <div class="habit-today-body">
           <input class="habit-today-name-input" value="${escapeHtml(habit.name)}" data-id="${habit.id}">
           <div class="habit-today-meta">
-            <span class="habit-today-badge ${habit.section}">${habit.section === 'beta' ? 'Matin' : 'Routine'}</span>
-            <span class="habit-today-streak ${streak >= 7 ? 'hot' : ''}">${streak === 0 ? 'No streak yet' : streak === 1 ? '1 day streak' : `${streak} day streak`}</span>
+            <span class="habit-today-badge ${habit.section}">${habit.section === 'beta' ? 'AM' : 'Routine'}</span>
           </div>
         </div>
-        <div class="habit-today-streak-num ${streakClass}">${streak}d</div>
+        <div class="habit-today-streak-num ${streakClass}" title="${streak === 0 ? 'No streak yet' : streak === 1 ? '1-day streak' : streak + '-day streak'}">${streak}d</div>
         <div class="habit-today-actions">
           ${habit.section === 'beta'
             ? `<button class="habit-today-action promote" data-promote="${habit.id}" title="Lock in">↑</button>`
@@ -4277,8 +4288,8 @@ function renderHabitsDiscipline(filtered, now, todayKey){
       else if(frac > 0) cls += ' l1';
     }
     if(c.key === todayKey) cls += ' today';
-    const label = c.d.toLocaleDateString('fr-FR',{ weekday:'short', day:'numeric', month:'short' });
-    const detail = c.total === 0 ? 'aucune habitude' : `${c.done}/${c.total} faites`;
+    const label = c.d.toLocaleDateString('en-US',{ weekday:'short', month:'short', day:'numeric' });
+    const detail = c.total === 0 ? 'no habits' : `${c.done}/${c.total} done`;
     return `<div class="${cls}" title="${label} · ${detail}"></div>`;
   }).join('');
 
@@ -5446,15 +5457,14 @@ function renderTrainedToday(){
   wrap.style.display = '';
   const dayEl = document.getElementById('training-today-day');
   if(dayEl){
-    const label = new Date().toLocaleDateString('fr-FR',{ weekday:'long', day:'numeric', month:'long' });
-    dayEl.textContent = label.charAt(0).toUpperCase() + label.slice(1);
+    dayEl.textContent = new Date().toLocaleDateString('en-US',{ weekday:'long', month:'long', day:'numeric' });
   }
   const todayKey = todayDateKey();
   const isChecked = !!state.training.trained[todayKey];
   const btn = document.getElementById('training-today-btn');
   const txt = document.getElementById('training-today-text');
   if(btn) btn.classList.toggle('checked', isChecked);
-  if(txt) txt.textContent = isChecked ? 'Entraînement validé' : "J'ai été m'entraîner";
+  if(txt) txt.textContent = isChecked ? 'Trained · logged' : 'I trained today';
   renderTrainingRegularity();
 }
 
@@ -5496,15 +5506,15 @@ function renderTrainingRegularity(){
   const maxCount = Math.max(1, ...weeks.map(wk => wk.count));
   grid.innerHTML = weeks.map(wk => {
     const pct = Math.round((wk.count / maxCount) * 100);
-    const label = wk.weekStart.toLocaleDateString('fr-FR',{ day:'numeric', month:'short' });
+    const label = wk.weekStart.toLocaleDateString('en-US',{ month:'short', day:'numeric' });
     const cls = 'training-reg-bar' + (wk.count === 0 ? ' empty' : '');
-    return `<div class="training-reg-col${wk.isCurrent ? ' current' : ''}" title="Semaine du ${label} · ${wk.count} séance${wk.count > 1 ? 's' : ''}">`
+    return `<div class="training-reg-col${wk.isCurrent ? ' current' : ''}" title="Week of ${label} · ${wk.count} session${wk.count !== 1 ? 's' : ''}">`
          + `<div class="training-reg-barwrap"><div class="${cls}" style="height:${Math.max(pct, 8)}%"></div></div>`
          + `<div class="training-reg-collabel">${wk.count}</div></div>`;
   }).join('');
 
   const avg = total / WEEKS;
-  statEl.innerHTML = `${total} séances <span class="pct">· ${avg.toFixed(1)}/sem</span>`;
+  statEl.innerHTML = `${total} sessions <span class="pct">· ${avg.toFixed(1)}/wk</span>`;
 }
 
 function toggleTrainedToday(){
@@ -6441,6 +6451,8 @@ function initPanelReorder(){
   const grid = document.querySelector('#view-dashboard .grid');
   if(!grid) return;
   const panels = grid.querySelectorAll('[data-panel]');
+  // Nothing to reorder with a single panel — skip the arrow controls entirely.
+  if(panels.length < 2) return;
 
   // Restore saved order
   const savedOrder = state.panelOrder || [];
@@ -6740,6 +6752,8 @@ function renderAll(){
 }
 
 init().then(() => initPanelReorder());
+// Lock entrance animations after the first paint so switching tabs never re-runs them.
+setTimeout(() => document.body.classList.add('loaded'), 1300);
 </script>
 
 </body>
